@@ -31,7 +31,7 @@ public class Matrix {
 
 	/**
 	 * Creates a transformation matrix describing a rotation of the given angle
-	 * @param angle angle in Radians
+	 * @param angle angle in radians
 	 */
 	public static Matrix fromRotation(double angle) {
 		double sinA = Math.sin(angle);
@@ -40,6 +40,7 @@ public class Matrix {
 	}
 
 	public final double a, b, c, d;
+	private Matrix inverseMatrix; //Store for cheap future usage
 
 	/**
 	 * Construct a square 2x2 Matrix of the form
@@ -116,7 +117,12 @@ public class Matrix {
 	 * The inverse of the matrix, representing the reverse transformation
 	 */
 	public Matrix inverse() {
-		return new Matrix(d, -c, -b, a).divide(determinant());
+		if(inverseMatrix == null)
+		{
+			inverseMatrix = new Matrix(d, -c, -b, a).divide(determinant());
+			inverseMatrix.inverseMatrix = this;
+		}
+		return inverseMatrix;
 	}
 
 	public String toString() {
