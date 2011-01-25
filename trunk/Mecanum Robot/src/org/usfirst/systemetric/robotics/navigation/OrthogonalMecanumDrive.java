@@ -1,4 +1,4 @@
-package org.usfirst.systemetric.robotics;
+package org.usfirst.systemetric.robotics.navigation;
 
 import org.usfirst.systemetric.geometry.Matrix;
 import org.usfirst.systemetric.geometry.Vector;
@@ -33,6 +33,16 @@ public class OrthogonalMecanumDrive implements HolonomicDrive {
 
 		frontRight.set(dir.y - dir.x, syncGroup);
 
+	}
+
+	public void setDriveVelocity(Vector driveVelocity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setTurnVelocity(double turnVelocity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

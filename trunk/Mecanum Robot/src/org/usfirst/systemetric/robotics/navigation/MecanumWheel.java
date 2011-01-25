@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.usfirst.systemetric.robotics;
+package org.usfirst.systemetric.robotics.navigation;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
