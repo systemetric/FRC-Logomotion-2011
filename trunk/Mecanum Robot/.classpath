@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Apps/Eclipse/Helios/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.5.2/sunspotfrcsdk/lib/WPILibJ/classes.jar"/>
-	<classpathentry kind="lib" path="C:/Apps/Eclipse/Helios/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.5.2/sunspotfrcsdk/lib/squawk_device.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FRC Java Library"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
