@@ -1,13 +1,14 @@
 package org.usfirst.systemetric;
 
+import org.usfirst.systemetric.geometry.Vector;
+import org.usfirst.systemetric.robotics.BaseRobot;
+import org.usfirst.systemetric.robotics.navigation.MecanumWheel;
 
-import org.usfirst.systemetric.robotics.MecanumWheel;
-
-import edu.wpi.first.wpilibj.CANJaguar;
-import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.Relay.Direction;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
-import edu.wpi.first.wpilibj.SimpleRobot;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,26 +18,39 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * directory.
  */
 public class ASimpleJavaBot extends SimpleRobot {
-    /**
-     * This function is called once each time the robot enters autonomous mode.
-     */
-	
+	/**
+	 * This function is called once each time the robot enters autonomous mode.
+	 */
+
 	DriverStationLCD lcd = DriverStationLCD.getInstance();
-	MecanumWheel wheel;
-	
-	protected DigitalInput digitalinput;
-	
-    public void autonomous() {
-    	lcd.println(Line.kUser2, 1, "Hello Java World!");
-    	lcd.updateLCD();
-    }
+	GenericHID driveJoystick = new Joystick(1);
+	Relay relay = new Relay(2, Direction.kForward);
 
-    /**
-     * This function is called once each time the robot enters operator control.
-     */
-    public void operatorControl() {
-    	lcd.println(Line.kUser2, 1, "Hello Java World!");
-    	lcd.updateLCD();
+	public ASimpleJavaBot() {
 
-    }
+	}
+
+	public void autonomous() {
+	}
+
+	/**
+	 * This function is called once each time the robot enters operator control.
+	 */
+	public void operatorControl() {
+		lcd.println(Line.kUser2, 1, "Hello Java World V2!");
+		lcd.updateLCD();
+		while (isOperatorControl()) {
+			boolean trigger = new Vector(driveJoystick.getX(), driveJoystick.getY()).length() > 0.5;//driveJoystick.getTrigger();
+			lcd.println(Line.kUser3, 1, trigger ? "Pushed  " : "Released");
+			
+			lcd.updateLCD();
+			relay.set(trigger ? Value.kOn : Value.kOff);
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 }
