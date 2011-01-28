@@ -7,6 +7,11 @@ public class Grabber implements IMechanism {
 	Solenoid tiltSolenoid;
 	Solenoid grabSolenoid;
 
+	public Grabber(int tiltChannel, int grabChannel) {
+		tiltSolenoid = new Solenoid(tiltChannel);
+		grabSolenoid = new Solenoid(grabChannel);
+	}
+
 	public void close() {
 		if (!isClosed())
 			grabSolenoid.set(true);
