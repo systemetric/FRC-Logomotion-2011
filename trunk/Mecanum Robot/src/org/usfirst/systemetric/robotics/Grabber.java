@@ -8,22 +8,44 @@ public class Grabber implements IMechanism {
 	Solenoid grabSolenoid;
 
 	public void close() {
-		if (!grabSolenoid.get())
+		if (!isClosed())
 			grabSolenoid.set(true);
 	}
 
 	public void open() {
-		if (grabSolenoid.get())
+		if (isClosed())
 			grabSolenoid.set(false);
 	}
 
 	public void tiltUp() {
-		if (!tiltSolenoid.get())
+		if (!isUp())
 			tiltSolenoid.set(true);
 	}
 
 	public void tiltDown() {
-		if (tiltSolenoid.get())
+		if (isUp())
 			tiltSolenoid.set(false);
+	}
+
+	public void toggle() {
+		if (isClosed())
+			open();
+		else
+			close();
+	}
+
+	public void toggleTilt() {
+		if (isUp())
+			tiltDown();
+		else
+			tiltUp();
+	}
+
+	public boolean isUp() {
+		return tiltSolenoid.get();
+	}
+
+	public boolean isClosed() {
+		return grabSolenoid.get();
 	}
 }
