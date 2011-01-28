@@ -2,7 +2,9 @@ package org.usfirst.systemetric.controllers;
 
 import org.usfirst.systemetric.robotics.Grabber;
 
+import edu.wpi.first.wpilibj.Dashboard;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.SmartDashboard;
 
 public class GrabberController implements Controllable {
 	static final int TILT_TOGGLE_BUTTON = 3;
@@ -23,6 +25,7 @@ public class GrabberController implements Controllable {
 			grabber.toggle();
 			toggled = true;
 		}
+		SmartDashboard.log(grabber.isClosed() ? "Closed" : "Open", "Grabber state");
 
 		if (!joystick.getRawButton(TILT_TOGGLE_BUTTON))
 			tiltToggled = false;
@@ -30,5 +33,6 @@ public class GrabberController implements Controllable {
 			grabber.toggleTilt();
 			tiltToggled = true;
 		}
+		SmartDashboard.log(grabber.isUp()/* ? "Up" : "Down"*/, "Tilt state");
 	}
 }

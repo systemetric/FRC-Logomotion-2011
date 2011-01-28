@@ -8,6 +8,8 @@ import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SmartDashboard;
+import edu.wpi.first.wpilibj.SmartDashboardPacketFactory;
 
 public class RobotTest extends IterativeRobot {
 	GenericHID driveJoystick;
