@@ -1,7 +1,10 @@
 package org.usfirst.systemetric;
 
+import org.usfirst.systemetric.controllers.Controllable;
+import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.BaseRobot;
+import org.usfirst.systemetric.robotics.Grabber;
 import org.usfirst.systemetric.robotics.navigation.MecanumWheel;
 
 import edu.wpi.first.wpilibj.Relay.Direction;
@@ -24,6 +27,10 @@ public class ASimpleJavaBot extends SimpleRobot {
 
 	DriverStationLCD lcd = DriverStationLCD.getInstance();
 	GenericHID driveJoystick = new Joystick(1);
+	
+
+	Controllable grabberController = new GrabberController(new Grabber(0,1));
+	
 	Relay relay = new Relay(2, Direction.kForward);
 
 	public ASimpleJavaBot() {

@@ -14,19 +14,19 @@ public class RobotTest extends IterativeRobot {
 	GenericHID armJoystick;
 
 	Arm arm;
-	MecanumDrive mecanumDrive;
+	//MecanumDrive mecanumDrive;
 	
-	Controllable grabberController = new GrabberController(new Grabber());
-	Controllable driveController = new DriveController(mecanumDrive);
+	Controllable grabberController = new GrabberController(new Grabber(1, 2));
+	//Controllable driveController = new DriveController(mecanumDrive);
 
 
-	public void autonomousInit() {
-		driveJoystick = new Joystick(1);
-		armJoystick = new Joystick(2);
+	public void teleopInit() {
+		//driveJoystick = new Joystick(1);
+		armJoystick = new Joystick(1);
 	}
 
-	public void autonomousPeriodic() {
+	public void teleopPeriodic() {
 		grabberController.controlWith(armJoystick);
-		driveController.controlWith(driveJoystick);
+		//driveController.controlWith(driveJoystick);
 	};
 }
