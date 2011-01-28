@@ -4,7 +4,9 @@ import org.usfirst.systemetric.robotics.Grabber;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
-public class GrabberController implements Controllable{
+public class GrabberController implements Controllable {
+	static final int TILT_TOGGLE_BUTTON = 3;
+	static final int GRAB_TOGGLE_BUTTON = 1; //Trigger
 	Grabber grabber;
 
 	boolean toggled = false;
@@ -15,17 +17,18 @@ public class GrabberController implements Controllable{
 	}
 
 	public void controlWith(GenericHID joystick) {
-		if (joystick.getTrigger() && !toggled) {
+		if (!joystick.getRawButton(GRAB_TOGGLE_BUTTON)) {
+			toggled = false;
+		} else if (!toggled) {
 			grabber.toggle();
 			toggled = true;
-		} else
-			toggled = false;
+		}
 
-		if (joystick.getRawButton(2) && !tiltToggled) {
+		if (!joystick.getRawButton(TILT_TOGGLE_BUTTON))
+			tiltToggled = false;
+		else if (!tiltToggled) {
 			grabber.toggleTilt();
 			tiltToggled = true;
-		} else
-			tiltToggled = false;
+		}
 	}
-
 }
