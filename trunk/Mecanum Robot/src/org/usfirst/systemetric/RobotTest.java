@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class RobotTest extends IterativeRobot {
 	GenericHID driveJoystick;
-	GenericHID armJoystick;
+	ControlBoard cb;
 	DriverStationEnhancedIO io;
 
 	Arm arm;
@@ -34,21 +34,22 @@ public class RobotTest extends IterativeRobot {
 
 	public void teleopInit() {
 		// driveJoystick = new Joystick(1);
-		armJoystick = new Joystick(1);
-		io = DriverStation.getInstance().getEnhancedIO();
 		try {
+			cb = ControlBoard.getInstance();
 			jag = new CANJaguar(2, ControlMode.kPercentVbus);
 		} catch (CANTimeoutException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Could not establish connection to Jaguars");
+			e.printStackTrace();
+		} catch (EnhancedIOException e) {
+			System.out.println("Could not establish connection to PSoC board");
 			e.printStackTrace();
 		}
-
 	}
 
 	boolean ledState = false;
 
 	public void teleopPeriodic() {
-		grabberController.controlWith(armJoystick);
+		grabberController.controlWith(cb);
 		// driveController.controlWith(driveJoystick);
 		try {
 			if (io.getDigital(1)) {

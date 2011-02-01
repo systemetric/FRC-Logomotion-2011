@@ -2,7 +2,6 @@ package org.usfirst.systemetric.controllers;
 
 import org.usfirst.systemetric.robotics.Grabber;
 
-import edu.wpi.first.wpilibj.Dashboard;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SmartDashboard;
 
@@ -18,7 +17,8 @@ public class GrabberController implements Controllable {
 		this.grabber = grabber;
 	}
 
-	public void controlWith(GenericHID joystick) {
+	public void controlWith(ControlBoard cb) {
+		GenericHID joystick = cb.armJoystick;
 		if (!joystick.getRawButton(GRAB_TOGGLE_BUTTON)) {
 			toggled = false;
 		} else if (!toggled) {
