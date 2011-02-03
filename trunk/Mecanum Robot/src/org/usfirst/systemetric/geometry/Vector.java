@@ -15,7 +15,7 @@ public class Vector
 		this.y = y;
 	}
 
-	public Vector scale(double factor)
+	public Vector times(double factor)
 	{
 		return new Vector(x * factor, y * factor);
 	}
@@ -32,7 +32,7 @@ public class Vector
 
 	public Vector unit()
 	{
-		return this.scale(1 / this.length());
+		return this.times(1 / this.length());
 	}
 
 	public double dot(Vector that)

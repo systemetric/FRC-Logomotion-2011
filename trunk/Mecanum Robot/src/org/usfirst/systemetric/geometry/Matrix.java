@@ -71,7 +71,7 @@ public class Matrix {
 	 * @param k
 	 *            constant to multiply by
 	 */
-	public Matrix multiply(double k) {
+	public Matrix times(double k) {
 		return new Matrix(a * k, b * k, c * k, d * k);
 	}
 
@@ -91,7 +91,7 @@ public class Matrix {
 	 * @param v
 	 *            vector to transform
 	 */
-	public Vector multiply(Vector v) {
+	public Vector times(Vector v) {
 		return new Vector(a * v.x + b * v.y, c * v.x + d * v.y);
 	}
 
@@ -101,7 +101,7 @@ public class Matrix {
 	 * @param that
 	 *            matrix to multiply by
 	 */
-	public Matrix multiply(Matrix that) {
+	public Matrix times(Matrix that) {
 		return new Matrix(a * that.a + b * that.c, a * that.b + b * that.d, c
 				* that.a + d * that.c, c * that.b + d * that.d);
 	}
