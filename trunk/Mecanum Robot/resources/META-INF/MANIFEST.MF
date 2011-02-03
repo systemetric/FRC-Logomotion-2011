@@ -1,6 +1,11 @@
-MIDlet-Name: ASimpleJavaBot
+MIDlet-Name: TheSimpleJavaBot
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: FIRST
-MIDlet-1: ASimpleJavaBot, , org.usfirst.frc0.ASimpleJavaBot
+MIDlet-1: RobotTest, , org.usfirst.systemetric.RobotTest
 MicroEdition-Profile: IMP-1.0
 MicroEdition-Configuration: CLDC-1.1
+
+
+
+
+
