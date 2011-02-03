@@ -1,5 +1,6 @@
-package org.usfirst.systemetric.controllers;
+package org.usfirst.systemetric;
 
+import org.usfirst.systemetric.controllers.DriverStationIO;
 import org.usfirst.systemetric.controllers.DriverStationIO.DigitalInput;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -13,12 +14,12 @@ public class ControlBoard {
 	private ControlBoard() throws EnhancedIOException {
 	}
 	
-	GenericHID driveJoystick = new Joystick(1);
-	GenericHID armJoystick = new Joystick(2);
+	public GenericHID driveJoystick = new Joystick(1);
+	public GenericHID armJoystick = new Joystick(2);
 	
-	DigitalInput minibitDeploy = new DigitalInput(1);
+	public DigitalInput minibitDeploy = new DigitalInput(1);
 	
-	DigitalInput[] heightButtons = new DigitalInput[] {
+	public DigitalInput[] heightButtons = new DigitalInput[] {
 			new DigitalInput(2),
 			new DigitalInput(3),
 			new DigitalInput(4),
@@ -28,7 +29,7 @@ public class ControlBoard {
 			new DigitalInput(8)
 	};
 	
-	DigitalOutput grabberLED = new DigitalOutput(9);
+	public DigitalOutput grabberLED = new DigitalOutput(9);
 	
 	public static ControlBoard getInstance() throws EnhancedIOException {
 		return instance == null ? new ControlBoard() : instance;

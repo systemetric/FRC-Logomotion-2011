@@ -1,5 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
+import org.usfirst.systemetric.ControlBoard;
 import org.usfirst.systemetric.robotics.Grabber;
 
 import edu.wpi.first.wpilibj.GenericHID;

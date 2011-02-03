@@ -1,5 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
+import org.usfirst.systemetric.ControlBoard;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 
