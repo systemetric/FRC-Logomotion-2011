@@ -5,7 +5,6 @@ import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.BaseRobot;
 import org.usfirst.systemetric.robotics.Grabber;
-import org.usfirst.systemetric.robotics.navigation.MecanumWheel;
 
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;

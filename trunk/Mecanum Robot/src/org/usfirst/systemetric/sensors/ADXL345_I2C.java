@@ -151,7 +151,7 @@ public class ADXL345_I2C extends SensorBase {
 
 	public Vector getHorizontalAcceleration() {
 		AllAxes acc = getAccelerations();
-		return new Vector(acc.XAxis, acc.YAxis).scale(9.81);
+		return new Vector(acc.XAxis, acc.YAxis).times(9.81);
 	}
 
 	public double getOffset(Axes axis) {

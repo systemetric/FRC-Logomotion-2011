@@ -8,17 +8,46 @@ package org.usfirst.systemetric.robotics.navigation;
 import org.usfirst.systemetric.geometry.Matrix;
 import org.usfirst.systemetric.geometry.Vector;
 
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.parsing.IMechanism;
+
 /**
  * 
  * @author Eric
  */
-public class MecanumDrive implements HolonomicDrive {
-	MecanumWheel[] wheels;
+public class MecanumDrive implements HolonomicDrive, PIDOutput {
+	public class Wheel implements IMechanism {
+		Vector position;
+		Matrix transformMatrix;
+
+		SpeedController motor;
+
+		public Wheel(Vector position, Vector driveAxis, Vector rollAxis,
+				SpeedController motor) {
+			this.position = position;
+
+			this.motor = motor;
+
+			transformMatrix = new Matrix(rollAxis, driveAxis);
+		}
+
+		public double getSpeed(Vector v) {
+			Vector wheelVector = transformMatrix.inverse().times(v);
+			return wheelVector.y;
+		}
+
+		public void setSpeed(double speed) {
+			motor.set(speed);
+		}
+	}
+
+	Wheel[] wheels;
 	final int numWheels;
 
 	double speed = 1;
 
-	public MecanumDrive(MecanumWheel[] wheels) {
+	public MecanumDrive(Wheel[] wheels) {
 		this.wheels = wheels;
 		numWheels = wheels.length;
 	}
@@ -39,11 +68,12 @@ public class MecanumDrive implements HolonomicDrive {
 	private void update() {
 		double[] driveSpeeds = getDriveSpeeds();
 		double[] turnSpeeds = getTurnSpeeds();
-		
+
 		for (int i = 0; i < numWheels; i++)
 			driveSpeeds[i] = driveSpeeds[i] + turnSpeeds[i];
-		
-		//Make sure the the turn speed does not exceed the maximum of the motors
+
+		// Make sure the the turn speed does not exceed the maximum of the
+		// motors
 		driveSpeeds = normalize(driveSpeeds);
 
 		for (int i = 0; i < numWheels; i++)
@@ -70,7 +100,7 @@ public class MecanumDrive implements HolonomicDrive {
 
 		return speeds;
 	}
-	
+
 	private double[] normalize(double speeds[]) {
 		return normalize(speeds, 1);
 	}
@@ -87,10 +117,11 @@ public class MecanumDrive implements HolonomicDrive {
 		double[] turnSpeeds = new double[numWheels];
 
 		for (int i = 0; i < numWheels; i++) {
-			Vector turnVector = Matrix.ROTATE90.multiply(wheels[i].position).scale(turnVelocity);
+			Vector turnVector = Matrix.ROTATE90.times(wheels[i].position)
+					.times(turnVelocity);
 			turnSpeeds[i] = wheels[i].getSpeed(turnVector);
 		}
-		
+
 		return turnSpeeds;
 	}
 
@@ -100,8 +131,13 @@ public class MecanumDrive implements HolonomicDrive {
 		for (int i = 0; i < numWheels; i++)
 			driveSpeeds[i] = wheels[i].getSpeed(driveVelocity);
 
-		//Limit the speeds calculated for movement so that none are more than the maximum speed
+		// Limit the speeds calculated for movement so that none are more than
+		// the maximum speed
 		driveSpeeds = normalize(driveSpeeds, driveVelocity.length());
 		return driveSpeeds;
+	}
+
+	public void pidWrite(double output) {
+		setTurnVelocity(output);
 	}
 }

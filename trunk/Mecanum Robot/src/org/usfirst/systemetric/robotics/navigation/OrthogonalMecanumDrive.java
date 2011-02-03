@@ -27,7 +27,7 @@ public class OrthogonalMecanumDrive implements HolonomicDrive {
 	}
 
 	private void update() {
-		Vector dir = Matrix.fromRotation(heading).multiply(direction);
+		Vector dir = Matrix.fromRotation(heading).times(direction);
 
 		byte syncGroup = 0x02;
 

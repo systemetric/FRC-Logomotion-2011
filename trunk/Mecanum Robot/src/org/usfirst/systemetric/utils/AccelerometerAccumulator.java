@@ -20,7 +20,7 @@ public class AccelerometerAccumulator {
 
 		long dt = currentTime - lastTime;
 		lastTime = currentTime;
-		velocity = velocity.add(accelerometer.getHorizontalAcceleration().scale(
+		velocity = velocity.add(accelerometer.getHorizontalAcceleration().times(
 				dt / 1000.0));
 	}
 
