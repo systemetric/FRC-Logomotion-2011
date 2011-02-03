@@ -44,4 +44,8 @@ public class Vector
 	{
 		return new Vector(r*Math.sin(theta), r*Math.cos(theta));
 	}
+	
+	public String toString() {
+		return "Vector: (" + x + "," + y + ")";
+	}
 }
