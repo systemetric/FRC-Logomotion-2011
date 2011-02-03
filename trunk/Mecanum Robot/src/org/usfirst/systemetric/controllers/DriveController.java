@@ -23,7 +23,7 @@ public class DriveController implements Controllable {
 
 		// If trigger is pressed, use fine control
 		if (joystick.getTrigger())
-			driveVector = driveVector.scale(0.5);
+			driveVector = driveVector.times(0.5);
 		
 		drive.setDriveVelocity(driveVector);
 
