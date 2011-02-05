@@ -25,6 +25,11 @@ public class Vector
 		return new Vector(x + that.x, y + that.y);
 	}
 
+	public Vector minus(Vector that)
+	{
+		return new Vector(x - that.x, y - that.y);
+	}
+
 	public double length()
 	{
 		return Math.sqrt(x * x + y * y);
@@ -46,6 +51,6 @@ public class Vector
 	}
 	
 	public String toString() {
-		return "Vector: (" + x + "," + y + ")";
+		return "Vector: (" + x + ", " + y + ")";
 	}
 }
