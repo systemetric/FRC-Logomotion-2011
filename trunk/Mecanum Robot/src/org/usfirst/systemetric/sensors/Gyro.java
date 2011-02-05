@@ -1,6 +1,7 @@
 package org.usfirst.systemetric.sensors;
 
-import org.usfirst.systemetric.utils.AngleFinder;
+import org.usfirst.systemetric.util.AngleFinder;
+
 import edu.wpi.first.wpilibj.AnalogChannel;
 
 public class Gyro extends edu.wpi.first.wpilibj.Gyro implements AngleFinder {

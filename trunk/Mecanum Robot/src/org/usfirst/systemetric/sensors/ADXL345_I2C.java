@@ -39,12 +39,12 @@ public class ADXL345_I2C extends SensorBase {
 		 */
 		public final byte value;
 		public final double LSBperG;
-		
+
 		static final byte k2G_val = 0x00;
 		static final byte k4G_val = 0x01;
 		static final byte k8G_val = 0x02;
 		static final byte k16G_val = 0x03;
-		
+
 		public static final DataFormat_Range k2G = new DataFormat_Range(
 				k2G_val, 256);
 		public static final DataFormat_Range k4G = new DataFormat_Range(
@@ -59,7 +59,7 @@ public class ADXL345_I2C extends SensorBase {
 			this.LSBperG = LSBperG;
 		}
 	}
-	
+
 	DataFormat_Range dataFormat_Range;
 
 	public static class Axes {
@@ -100,7 +100,7 @@ public class ADXL345_I2C extends SensorBase {
 	 */
 	public ADXL345_I2C(int slot, DataFormat_Range range) {
 		dataFormat_Range = range;
-		
+
 		DigitalModule module = DigitalModule.getInstance(slot);
 		m_i2c = module.getI2C(kAddress);
 
@@ -140,18 +140,27 @@ public class ADXL345_I2C extends SensorBase {
 	public AllAxes getAccelerations() {
 		AllAxes data = new AllAxes();
 		byte[] rawData = new byte[6];
-		m_i2c.read(kDataRegister, rawData.length, rawData);
+		if (!m_i2c.read(kDataRegister, rawData.length, rawData)) {
 
-		// Sensor is little endian... swap bytes
-		data.XAxis = accelFromBytes(rawData[0], rawData[1]);
-		data.YAxis = accelFromBytes(rawData[2], rawData[3]);
-		data.ZAxis = accelFromBytes(rawData[4], rawData[5]);
-		return data;
+			// Sensor is little endian... swap bytes
+			data.XAxis = accelFromBytes(rawData[0], rawData[1]);
+			data.YAxis = accelFromBytes(rawData[2], rawData[3]);
+			data.ZAxis = accelFromBytes(rawData[4], rawData[5]);
+			return data;
+
+		} else {
+			return null;
+		}
+		/*
+		 * data.XAxis = Double.NaN; data.YAxis = Double.NaN; data.ZAxis =
+		 * Double.NaN;
+		 */
 	}
 
 	public Vector getHorizontalAcceleration() {
 		AllAxes acc = getAccelerations();
-		return new Vector(acc.XAxis, acc.YAxis).times(9.81);
+		return acc == null ? new Vector(Double.NaN, Double.NaN) : new Vector(
+				acc.XAxis, acc.YAxis).times(9.81);
 	}
 
 	public double getOffset(Axes axis) {
@@ -189,7 +198,7 @@ public class ADXL345_I2C extends SensorBase {
 		return Math.sqrt(axes.XAxis * axes.XAxis + axes.YAxis * axes.YAxis
 				+ axes.ZAxis * axes.ZAxis);
 	}
-	
+
 	/**
 	 * WARNING: May not actually work
 	 */
@@ -197,14 +206,16 @@ public class ADXL345_I2C extends SensorBase {
 
 		ADXL345_I2C.AllAxes reading = getAccelerations();
 		double acceleration = getAcceleration();
-		//System.out.println("Acc: " + reading.XAxis + "," + reading.YAxis + ","
-		//		+ reading.ZAxis);
-		
+		// System.out.println("Acc: " + reading.XAxis + "," + reading.YAxis +
+		// ","
+		// + reading.ZAxis);
+
 		reading.XAxis = reading.XAxis - reading.XAxis / acceleration;
 		reading.YAxis = reading.YAxis - reading.YAxis / acceleration;
 		reading.ZAxis = reading.ZAxis - reading.ZAxis / acceleration;
-		//System.out.println("Offset: " + reading.XAxis + "," + reading.YAxis + ","
-		//		+ reading.ZAxis);
+		// System.out.println("Offset: " + reading.XAxis + "," + reading.YAxis +
+		// ","
+		// + reading.ZAxis);
 		setOffsets(reading);
 	}
 }

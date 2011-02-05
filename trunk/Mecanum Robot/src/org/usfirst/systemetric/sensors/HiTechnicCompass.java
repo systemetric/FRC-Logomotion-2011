@@ -7,7 +7,7 @@
 
 package org.usfirst.systemetric.sensors;
 
-import org.usfirst.systemetric.utils.AngleFinder;
+import org.usfirst.systemetric.util.AngleFinder;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.parsing.ISensor;
@@ -23,7 +23,8 @@ import edu.wpi.first.wpilibj.parsing.ISensor;
  * http://www.hitechnic.com/index.html?lang=en-us&target=d17.html
  * 
  */
-public class HiTechnicCompass extends SensorBase implements AngleFinder, ISensor {
+public class HiTechnicCompass extends SensorBase implements AngleFinder,
+		ISensor {
 
 	/**
 	 * An exception dealing with connecting to and communicating with the
@@ -48,7 +49,7 @@ public class HiTechnicCompass extends SensorBase implements AngleFinder, ISensor
 	private static final byte kManufacturerSize = 0x08;
 	private static final byte kSensorTypeBaseRegister = 0x10;
 	private static final byte kSensorTypeSize = 0x08;
-	private static final byte kHeadingRegister = 0x42;// 0x44;
+	private static final byte kHeadingRegister = 0x42;
 
 	private final static byte kCommand = 0x41;
 	private final static byte kCalibrateMode = 0x43;
@@ -99,14 +100,19 @@ public class HiTechnicCompass extends SensorBase implements AngleFinder, ISensor
 	 * @return Angle of the compass in degrees.
 	 */
 	public double getAngle() {
-		return m_i2c.read(kHeadingRegister, 2, buf) ? Double.NaN
-				: ((buf[0] & 0xff) << 1) + buf[1];
+		
+		return m_i2c.read(kHeadingRegister, 2, buf) ? Double.NaN : ((buf[0] &
+		0xff) << 1) + buf[1];
+		
+
+		//return m_i2c.read(kHeadingRegister, 2, buf) ? Double.NaN
+		//		: buf[0] & 0xff + (buf[1] & 0xff) * 256;
 	}
 
 	public void startCalibration() {
 		m_i2c.write(kCommand, kCalibrateMode);
 	}
-	
+
 	public void stopCalibration() {
 		m_i2c.write(kCommand, kMeasurementMode);
 	}
