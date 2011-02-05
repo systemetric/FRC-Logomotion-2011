@@ -6,21 +6,27 @@ import org.usfirst.systemetric.robotics.Grabber;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 
 import org.usfirst.systemetric.sensors.ADXL345_I2C;
+import org.usfirst.systemetric.sensors.ADXL345_I2C.AllAxes;
+import org.usfirst.systemetric.sensors.ADXL345_I2C.Axes;
 import org.usfirst.systemetric.sensors.Gyro;
-import org.usfirst.systemetric.sensors.HiTechnicCompass;
 import org.usfirst.systemetric.util.AccelerometerAccumulator;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.HiTechnicCompass;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SmartDashboard;
+import edu.wpi.first.wpilibj.SmartDashboardPacketFactory;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
-public class RobotTest extends IterativeRobot {
+public class CopyOfRobotTest extends IterativeRobot {
 	GenericHID driveJoystick;
 	ControlBoard cb;
 	DriverStationEnhancedIO io;
@@ -33,8 +39,7 @@ public class RobotTest extends IterativeRobot {
 	MecanumDrive mecanumDrive;
 
 	Controllable grabberController = new GrabberController(new Grabber(1, 2));
-
-	// Controllable driveController = new DriveController(mecanumDrive);
+	//Controllable driveController = new DriveController(mecanumDrive);
 
 	public void robotInit() {
 		try {
@@ -42,12 +47,11 @@ public class RobotTest extends IterativeRobot {
 			accumulator = new AccelerometerAccumulator(accelerometer);
 
 			accelerometer.calibrate();
-
+			
+			compass = new HiTechnicCompass(4);
 		} catch (Exception e) {
 			System.out.println("ARGGG");
-			e.printStackTrace();
 		}
-		compass = new HiTechnicCompass(4);
 
 		try {
 			jag = new CANJaguar(2, ControlMode.kPercentVbus);
@@ -67,7 +71,6 @@ public class RobotTest extends IterativeRobot {
 			System.out.println("Could not establish connection to PSoC board");
 			e.printStackTrace();
 		}
-		accumulator.reset();
 	}
 
 	Gyro g;
@@ -77,14 +80,15 @@ public class RobotTest extends IterativeRobot {
 		DriverStationLCD lcd = DriverStationLCD.getInstance();
 
 		grabberController.controlWith(cb);
-		// driveController.controlWith(cb);
-
-		// accumulator.update();
-		// System.out.println("Acc: " + accumulator.getAcceleration());
-		// System.out.println("Vel: " + accumulator.getVelocity());
-		// System.out.println("Pos: " + accumulator.getPosition());
-		// System.out.println("------------------");
-		System.out.println(compass.getAngle());
+		//driveController.controlWith(cb);
+		
+		// ADXL345_I2C.AllAxes reading = accelerometer.getAccelerations();
+		// reading.XAxis + "," + reading.YAxis + "," + reading.ZAxis);
+		
+		System.out.println("Acc: " + accelerometer.getAcceleration());
+		
+		accumulator.update();
+		System.out.println("Vel: " + accumulator.getVelocity());
 
 		/*
 		 * { ADXL345_I2C.AllAxes reading = accelerometer.getAccelerations();
@@ -95,33 +99,28 @@ public class RobotTest extends IterativeRobot {
 		 * Math.sqrt(reading.XAxis * reading.XAxis + reading.YAxis reading.YAxis
 		 * + reading.ZAxis * reading.ZAxis)); }
 		 */
-
-		if (cb.armJoystick.getTrigger()) {
-			System.out.println("Starting calibration. Spin compass please");
-			compass.startCalibration();
-			
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-			}
-			
-			compass.stopCalibration();
 		
-			System.out.println("Finished calibration!");
+		if (cb.armJoystick.getTrigger())
+			accumulator.reset();
+		
+		//System.out.println(compass.getAngle());
+		lcd.println(Line.kMain6, 1, "" + compass.getAngle());
+		lcd.updateLCD();
+
+
+		try {
+			if (io.getDigital(1)) {
+				ledState = !ledState;
+				io.setLED(1, ledState);
+				jag.setX(1);
+			} else
+				jag.setX(-0.5);
+
+		} catch (EnhancedIOException e) {
+			e.printStackTrace();
+		} catch (CANTimeoutException e) {
+			e.printStackTrace();
 		}
-		// accumulator.reset();
-
-		// System.out.println(compass.getAngle());
-		// lcd.println(Line.kMain6, 1, "" + compass.getAngle());
-		// lcd.updateLCD();
-
-		/*
-		 * try { if (io.getDigital(1)) { ledState = !ledState; io.setLED(1,
-		 * ledState); jag.setX(1); } else jag.setX(-0.5);
-		 * 
-		 * } catch (EnhancedIOException e) { e.printStackTrace(); } catch
-		 * (CANTimeoutException e) { e.printStackTrace(); }
-		 */
 
 	};
 }

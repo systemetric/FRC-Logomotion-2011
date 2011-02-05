@@ -2,8 +2,8 @@ package org.usfirst.systemetric;
 
 import org.usfirst.systemetric.controllers.DriverStationIO;
 import org.usfirst.systemetric.controllers.DriverStationIO.DigitalInput;
+import org.usfirst.systemetric.controllers.DriverStationIO.DigitalOutput;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
