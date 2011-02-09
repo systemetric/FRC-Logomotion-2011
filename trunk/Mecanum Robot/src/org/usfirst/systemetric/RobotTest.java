@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStationEnhancedIO;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
@@ -28,6 +29,7 @@ public class RobotTest extends IterativeRobot {
 	AccelerometerAccumulator accumulator;
 	HiTechnicCompass compass;
 	Arm arm;
+	Encoder a;
 
 	CANJaguar jag;
 	MecanumDrive mecanumDrive;
