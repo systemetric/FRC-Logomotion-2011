@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj.parsing.IMechanism;
  * @author Eric
  */
 public class MecanumDrive implements HolonomicDrive, PIDOutput {
-	public class Wheel implements IMechanism {
+	public static class Wheel implements IMechanism {
 		Vector position;
-		Matrix transformMatrix;
+		public Matrix transformMatrix;
 
 		SpeedController motor;
 
