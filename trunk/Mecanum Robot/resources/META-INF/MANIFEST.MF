@@ -1,9 +1,12 @@
-MIDlet-Name: TheSimpleJavaBot
+MIDlet-Name: SystemetricCode
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: FIRST
-MIDlet-1: RobotTest, , org.usfirst.systemetric.RobotTest
+MIDlet-1: MecanumMotorTest, , org.usfirst.systemetric.tests.MecanumMotorTest
 MicroEdition-Profile: IMP-1.0
 MicroEdition-Configuration: CLDC-1.1
+
+
+
 
 
 
