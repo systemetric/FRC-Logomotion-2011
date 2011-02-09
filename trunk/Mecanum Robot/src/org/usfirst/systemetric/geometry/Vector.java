@@ -19,6 +19,11 @@ public class Vector
 	{
 		return new Vector(x * factor, y * factor);
 	}
+	
+	public Vector divideBy(double factor)
+	{
+		return new Vector(x / factor, y / factor);
+	}
 
 	public Vector add(Vector that)
 	{
