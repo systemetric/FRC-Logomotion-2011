@@ -126,7 +126,7 @@ public class Matrix {
 	}
 
 	public String toString() {
-		return "Matrix: [" + a + "," + b + "][" + c + "," + d + "]]";
+		return "Matrix: [[" + a + "," + b + "],[" + c + "," + d + "]]";
 	}
 
 	public boolean equals(Object obj) {
