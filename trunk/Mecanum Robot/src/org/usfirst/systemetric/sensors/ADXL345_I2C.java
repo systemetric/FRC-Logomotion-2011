@@ -125,11 +125,15 @@ public class ADXL345_I2C extends SensorBase {
 		// Sensor is little endian... swap bytes
 		return accelFromBytes(rawAccel[0], rawAccel[1]);
 	}
-
-	private double accelFromBytes(byte first, byte second) {
+	
+	private int rawAccelFromBytes(byte first, byte second) {
 		short tempLow = (short) (first & 0xff);
 		short tempHigh = (short) ((second << 8) & 0xff00);
-		return (tempLow | tempHigh) / dataFormat_Range.LSBperG;
+		return (tempLow | tempHigh);
+	}
+
+	private double accelFromBytes(byte first, byte second) {
+		return rawAccelFromBytes(first, second) / dataFormat_Range.LSBperG;
 	}
 
 	/**
@@ -146,6 +150,26 @@ public class ADXL345_I2C extends SensorBase {
 			data.XAxis = accelFromBytes(rawData[0], rawData[1]);
 			data.YAxis = accelFromBytes(rawData[2], rawData[3]);
 			data.ZAxis = accelFromBytes(rawData[4], rawData[5]);
+			return data;
+
+		} else {
+			return null;
+		}
+		/*
+		 * data.XAxis = Double.NaN; data.YAxis = Double.NaN; data.ZAxis =
+		 * Double.NaN;
+		 */
+	}
+	
+	public AllAxes getRawAccelerations() {
+		AllAxes data = new AllAxes();
+		byte[] rawData = new byte[6];
+		if (!m_i2c.read(kDataRegister, rawData.length, rawData)) {
+
+			// Sensor is little endian... swap bytes
+			data.XAxis = rawAccelFromBytes(rawData[0], rawData[1]);
+			data.YAxis = rawAccelFromBytes(rawData[2], rawData[3]);
+			data.ZAxis = rawAccelFromBytes(rawData[4], rawData[5]);
 			return data;
 
 		} else {
