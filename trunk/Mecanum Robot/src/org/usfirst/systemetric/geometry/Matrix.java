@@ -40,7 +40,7 @@ public class Matrix {
 	}
 
 	public final double a, b, c, d;
-	private Matrix inverseMatrix; //Store for cheap future usage
+	private Matrix inverseMatrix = null; //Store for cheap future usage
 
 	/**
 	 * Construct a square 2x2 Matrix of the form
@@ -62,7 +62,8 @@ public class Matrix {
 	 * pair of coordinate axes
 	 */
 	public Matrix(Vector xAxis, Vector yAxis) {
-		this(xAxis.x, yAxis.x, xAxis.y, yAxis.y);
+		this(xAxis.x, yAxis.x,
+		     xAxis.y, yAxis.y);
 	}
 
 	/**
@@ -102,8 +103,11 @@ public class Matrix {
 	 *            matrix to multiply by
 	 */
 	public Matrix times(Matrix that) {
-		return new Matrix(a * that.a + b * that.c, a * that.b + b * that.d, c
-				* that.a + d * that.c, c * that.b + d * that.d);
+		return new Matrix(
+				a * that.a + b * that.c,
+				a * that.b + b * that.d,
+				c * that.a + d * that.c,
+				c * that.b + d * that.d);
 	}
 
 	/**
@@ -119,7 +123,7 @@ public class Matrix {
 	public Matrix inverse() {
 		if(inverseMatrix == null)
 		{
-			inverseMatrix = new Matrix(d, -c, -b, a).divide(determinant());
+			inverseMatrix = new Matrix(d, -b, -c, a).divide(determinant());
 			inverseMatrix.inverseMatrix = this;
 		}
 		return inverseMatrix;
