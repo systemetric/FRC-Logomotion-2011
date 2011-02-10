@@ -7,8 +7,6 @@ import org.usfirst.systemetric.robotics.navigation.MecanumDrive.Wheel;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
-import static java.lang.Math.*;
-
 public class MecanumMatrixTest {
 
 	/**

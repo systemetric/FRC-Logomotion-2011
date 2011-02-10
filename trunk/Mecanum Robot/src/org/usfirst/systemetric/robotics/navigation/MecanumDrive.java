@@ -39,6 +39,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 
 		public void setSpeed(double speed) {
 			motor.set(speed);
+			System.out.println(speed);
 		}
 	}
 
@@ -68,16 +69,17 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	private void update() {
 		double[] driveSpeeds = getDriveSpeeds();
 		double[] turnSpeeds = getTurnSpeeds();
-
-		for (int i = 0; i < numWheels; i++)
-			driveSpeeds[i] = driveSpeeds[i] + turnSpeeds[i];
-
-		// Make sure the the turn speed does not exceed the maximum of the
-		// motors
-		driveSpeeds = normalize(driveSpeeds);
+//
+//		for (int i = 0; i < numWheels; i++)
+//			driveSpeeds[i] = driveSpeeds[i] + turnSpeeds[i];
+//
+//		// Make sure the the turn speed does not exceed the maximum of the
+//		// motors
+//		driveSpeeds = normalize(driveSpeeds);
 
 		for (int i = 0; i < numWheels; i++)
 			wheels[i].setSpeed(driveSpeeds[i]);
+		System.out.println(driveSpeeds[0] + "," + driveSpeeds[1]);
 	}
 
 	/**
@@ -133,7 +135,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 
 		// Limit the speeds calculated for movement so that none are more than
 		// the maximum speed
-		driveSpeeds = normalize(driveSpeeds, driveVelocity.length());
+		// driveSpeeds = normalize(driveSpeeds, driveVelocity.length());
 		return driveSpeeds;
 	}
 

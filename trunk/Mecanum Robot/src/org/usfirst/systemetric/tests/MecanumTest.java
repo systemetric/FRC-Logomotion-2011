@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
-public class MecanumMotorTest extends IterativeRobot {
+public class MecanumTest extends IterativeRobot {
 	MecanumDrive robot;
 	Joystick joy = new Joystick(1);
 
 	public void robotInit() {
 		Vector size = new Vector(0.55, 0.7);
 		double wheelRadius = 0.075;
-		double gearRatio = 19 / 36;
+		double gearRatio = 19.0 / 36.0;
 
 		try {
 			robot = OrthogonalMecanumDriveFactory.createMecanumDrive(size,
@@ -27,6 +27,8 @@ public class MecanumMotorTest extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		robot.setDriveVelocity(new Vector(joy.getX(), joy.getY()));
+		Vector direction = new Vector(joy.getX(), joy.getY());
+		System.out.println(direction);
+		robot.setDriveVelocity(direction.times(0.1));
 	}
 }
