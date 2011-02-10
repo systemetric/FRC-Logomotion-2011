@@ -53,7 +53,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 		numWheels = wheels.length;
 	}
 
-	Vector driveVelocity;
+	Vector driveVelocity = new Vector(0, 0);
 	double turnVelocity;
 
 	public void setDriveVelocity(Vector driveVelocity) {
@@ -69,13 +69,13 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	private void update() {
 		double[] driveSpeeds = getDriveSpeeds();
 		double[] turnSpeeds = getTurnSpeeds();
-//
-//		for (int i = 0; i < numWheels; i++)
-//			driveSpeeds[i] = driveSpeeds[i] + turnSpeeds[i];
-//
-//		// Make sure the the turn speed does not exceed the maximum of the
-//		// motors
-//		driveSpeeds = normalize(driveSpeeds);
+
+		for (int i = 0; i < numWheels; i++)
+			driveSpeeds[i] = driveSpeeds[i] + turnSpeeds[i];
+
+		// Make sure the the turn speed does not exceed the maximum of the
+		// motors
+		driveSpeeds = normalize(driveSpeeds);
 
 		for (int i = 0; i < numWheels; i++)
 			wheels[i].setSpeed(driveSpeeds[i]);
@@ -89,7 +89,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	 * @param speeds
 	 * @return normalized speeds
 	 */
-	private double[] normalize(double[] speeds, double maxSpeed) {
+	private double[] normalize(double[] speeds, double maxSpeed, boolean scale) {
 		maxSpeed = maxSpeed > 1 ? 1 : Math.abs(maxSpeed);
 
 		double maxInputSpeed = Double.NEGATIVE_INFINITY;
@@ -97,14 +97,15 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 		for (int i = 0; i < numWheels; i++)
 			maxInputSpeed = Math.max(Math.abs(speeds[i]), maxInputSpeed);
 
-		for (int i = 0; i < numWheels; i++)
-			speeds[i] = (speeds[i] / maxInputSpeed) * maxSpeed;
+		if (scale || maxInputSpeed > maxSpeed)
+			for (int i = 0; i < numWheels; i++)
+				speeds[i] = (speeds[i] / maxInputSpeed) * maxSpeed;
 
 		return speeds;
 	}
 
 	private double[] normalize(double speeds[]) {
-		return normalize(speeds, 1);
+		return normalize(speeds, 1, false);
 	}
 
 	/**

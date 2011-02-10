@@ -13,7 +13,7 @@ public class JaguarFactory {
 		jag.setPID(-0.1, 0, 0);
 		jag.configNeutralMode(CANJaguar.NeutralMode.kBrake);
 		jag.configEncoderCodesPerRev(360);
-		jag.configMaxOutputVoltage(6);
+		jag.configMaxOutputVoltage(12);
 
 		jag.enableControl();
 
@@ -23,9 +23,10 @@ public class JaguarFactory {
 	public static CANJaguar createPercentageController(int port)
 	    throws CANTimeoutException {
 		CANJaguar jag = new CANJaguar(port, CANJaguar.ControlMode.kPercentVbus);
+		jag.configNeutralMode(CANJaguar.NeutralMode.kBrake);
 		
 		jag.configMaxOutputVoltage(6);
-		jag.setVoltageRampRate(2);
+		jag.setVoltageRampRate(4);
 
 		return jag;
 	}

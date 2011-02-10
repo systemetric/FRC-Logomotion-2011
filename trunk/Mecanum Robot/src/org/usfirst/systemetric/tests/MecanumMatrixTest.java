@@ -63,7 +63,6 @@ public class MecanumMatrixTest {
 		
 		MecanumDrive d = new MecanumDrive(wheels);
 		
-		d.setTurnVelocity(90);
 		System.out.println("-----------------");
 	}
 }
