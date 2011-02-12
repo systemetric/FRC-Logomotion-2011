@@ -13,18 +13,33 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
 
 /**
- * 
+ * A class for representing a generic Mecanum drive.
  * @author Eric
  */
 public class MecanumDrive implements HolonomicDrive, PIDOutput {
+	public static double MAX_SPEED = 1000;
+
 	public static class Wheel implements IMechanism {
-		Vector position;
-		public Matrix transformMatrix;
+		Vector          position;
+		public Matrix   transformMatrix;
 
 		SpeedController motor;
 
+		/**
+		 * @param position
+		 *            The position of the center of the mecanum wheel in respect
+		 *            to the center of the robot
+		 * @param driveAxis
+		 *            The direction which the wheel moves when powered, if the
+		 *            rollers were glued solid
+		 * @param rollAxis
+		 *            The direction which the wheels roll freely, if the motor
+		 *            shaft is held still
+		 * @param motor
+		 *            The SpeedController object representing the actual motor
+		 */
 		public Wheel(Vector position, Vector driveAxis, Vector rollAxis,
-				SpeedController motor) {
+		    SpeedController motor) {
 			this.position = position;
 
 			this.motor = motor;
@@ -39,15 +54,18 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 
 		public void setSpeed(double speed) {
 			motor.set(speed);
-			System.out.println(speed);
 		}
 	}
 
-	Wheel[] wheels;
+	Wheel[]   wheels;
 	final int numWheels;
 
-	double speed = 1;
+	double    speed = 1;
 
+	/**
+	 * Construct a MecanumDrive from the specified set of wheels
+	 * @param wheels
+	 */
 	public MecanumDrive(Wheel[] wheels) {
 		this.wheels = wheels;
 		numWheels = wheels.length;
@@ -65,6 +83,12 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 		this.turnVelocity = turnVelocity;
 		update();
 	}
+	
+	public void set(Vector driveVelocity, double turnVelocity) {
+		this.driveVelocity = driveVelocity;
+		this.turnVelocity = turnVelocity;
+		update();
+	}
 
 	private void update() {
 		double[] driveSpeeds = getDriveSpeeds();
@@ -79,7 +103,6 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 
 		for (int i = 0; i < numWheels; i++)
 			wheels[i].setSpeed(driveSpeeds[i]);
-		System.out.println(driveSpeeds[0] + "," + driveSpeeds[1]);
 	}
 
 	/**
@@ -90,10 +113,11 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	 * @return normalized speeds
 	 */
 	private double[] normalize(double[] speeds, double maxSpeed, boolean scale) {
-		maxSpeed = maxSpeed > 1 ? 1 : Math.abs(maxSpeed);
+		
+		maxSpeed = maxSpeed > MAX_SPEED ? MAX_SPEED : Math.abs(maxSpeed);
 
+		//Find the maximum speed in the speeds[] array
 		double maxInputSpeed = Double.NEGATIVE_INFINITY;
-
 		for (int i = 0; i < numWheels; i++)
 			maxInputSpeed = Math.max(Math.abs(speeds[i]), maxInputSpeed);
 
@@ -105,7 +129,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	}
 
 	private double[] normalize(double speeds[]) {
-		return normalize(speeds, 1, false);
+		return normalize(speeds, MAX_SPEED, false);
 	}
 
 	/**
@@ -121,7 +145,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 
 		for (int i = 0; i < numWheels; i++) {
 			Vector turnVector = Matrix.ROTATE90.times(wheels[i].position)
-					.times(turnVelocity);
+			    .times(turnVelocity);
 			turnSpeeds[i] = wheels[i].getSpeed(turnVector);
 		}
 

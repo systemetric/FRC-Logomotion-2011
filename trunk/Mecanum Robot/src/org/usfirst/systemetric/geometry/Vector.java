@@ -6,6 +6,10 @@ package org.usfirst.systemetric.geometry;
  */
 public class Vector
 {
+	public final static Vector ZERO = new Vector(0, 0);
+	public final static Vector I = new Vector(1, 0);
+	public final static Vector J = new Vector(0, 1);
+	
 	public final double x;
 	public final double y;
 

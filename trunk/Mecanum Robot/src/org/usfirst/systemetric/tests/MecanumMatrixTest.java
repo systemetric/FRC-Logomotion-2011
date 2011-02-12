@@ -7,6 +7,13 @@ import org.usfirst.systemetric.robotics.navigation.MecanumDrive.Wheel;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
+/**
+ * A test to check whether the math behind the mecanum drive works correctly.
+ * Prints the speed each motor would be run at to System.out
+ * 
+ * @author Eric
+ * 
+ */
 public class MecanumMatrixTest {
 
 	/**
@@ -48,21 +55,21 @@ public class MecanumMatrixTest {
 
 	public static void main(String[] args) {
 		Wheel[] wheels = new Wheel[4];
-		
-		wheels[0] = new Wheel(new Vector (10,10), new Vector (0,10), new Vector (1,1),
-		new TestJaguar("FrontRight"));
 
-		wheels[1] = new Wheel(new Vector (10,-10), new Vector (0,10), new Vector (1,-1),
-		new TestJaguar(" BackRight"));
+		wheels[0] = new Wheel(new Vector(10, 10), new Vector(0, 10),
+		    new Vector(1, 1), new TestJaguar("FrontRight"));
 
-		wheels[2] = new Wheel(new Vector (-10,-10), new Vector (0,10), new Vector (-1,-1),
-		new TestJaguar("  BackLeft"));
+		wheels[1] = new Wheel(new Vector(10, -10), new Vector(0, 10),
+		    new Vector(1, -1), new TestJaguar(" BackRight"));
 
-		wheels[3] = new Wheel(new Vector (-10,10), new Vector (0,10), new Vector (-1,1),
-		new TestJaguar(" FrontLeft"));
-		
+		wheels[2] = new Wheel(new Vector(-10, -10), new Vector(0, 10),
+		    new Vector(-1, -1), new TestJaguar("  BackLeft"));
+
+		wheels[3] = new Wheel(new Vector(-10, 10), new Vector(0, 10),
+		    new Vector(-1, 1), new TestJaguar(" FrontLeft"));
+
 		MecanumDrive d = new MecanumDrive(wheels);
-		
+
 		System.out.println("-----------------");
 	}
 }
