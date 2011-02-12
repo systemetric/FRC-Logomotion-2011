@@ -6,28 +6,15 @@ import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.NeutralMode;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
+/**
+ * @author Robotics
+ *
+ */
 public class MotorTest extends IterativeRobot {
 	CANJaguar frontRight;
 	CANJaguar backRight;
 	CANJaguar backLeft;
 	CANJaguar frontLeft;
-
-	public void robotInit() {
-		int i = 0;
-		try {
-			frontRight = JaguarFactory.createPercentageController(2);
-			i++;
-			backRight = JaguarFactory.createPercentageController(3);
-			i++;
-			backLeft = JaguarFactory.createPercentageController(4);
-			i++;
-			frontLeft = JaguarFactory.createPercentageController(5);
-			i++;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Configured only " + i + " jaguars");
-		}
-	}
 
 	public void autonomousPeriodic() {
 		int i = 0;

@@ -27,19 +27,23 @@ public class JaguarFactory {
 	 */
 	public static CANJaguar createSpeedController(int port)
 	    throws CANTimeoutException {
-
-		CANJaguar jag = new CANJaguar(port, CANJaguar.ControlMode.kSpeed);
-		jag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
-		jag.enableControl();
-		jag.setPID(-SPEED_P, -SPEED_I, -SPEED_D);
-
-		jag.configNeutralMode(CANJaguar.NeutralMode.kBrake);
-		jag.configEncoderCodesPerRev(360);
-		jag.configMaxOutputVoltage(MAX_VOLTAGE);
-
-		jag.enableControl();
-
-		return jag;
+		try {
+    		CANJaguar jag = new CANJaguar(port, CANJaguar.ControlMode.kSpeed);
+    		jag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
+    		jag.enableControl();
+    		jag.setPID(-SPEED_P, -SPEED_I, -SPEED_D);
+    
+    		jag.configNeutralMode(CANJaguar.NeutralMode.kBrake);
+    		jag.configEncoderCodesPerRev(360);
+    		jag.configMaxOutputVoltage(MAX_VOLTAGE);
+    
+    		jag.enableControl();
+    
+    		return jag;
+		} catch (CANTimeoutException e) {
+			System.err.println("Could not connect to jaguar number "+port);
+			throw e;
+		}
 	}
 
 	/**
@@ -50,12 +54,17 @@ public class JaguarFactory {
 	 */
 	public static CANJaguar createPercentageController(int port)
 	    throws CANTimeoutException {
-		CANJaguar jag = new CANJaguar(port, CANJaguar.ControlMode.kPercentVbus);
-		jag.configNeutralMode(CANJaguar.NeutralMode.kBrake);
-
-		jag.configMaxOutputVoltage(MAX_VOLTAGE);
-		jag.setVoltageRampRate(VOLTAGE_RAMP_RATE);
-
-		return jag;
+		try {
+    		CANJaguar jag = new CANJaguar(port, CANJaguar.ControlMode.kPercentVbus);
+    		jag.configNeutralMode(CANJaguar.NeutralMode.kBrake);
+    
+    		jag.configMaxOutputVoltage(MAX_VOLTAGE);
+    		jag.setVoltageRampRate(VOLTAGE_RAMP_RATE);
+    
+    		return jag;
+		} catch (CANTimeoutException e) {
+			System.err.println("Could not connect to jaguar number "+port);
+			throw e;
+		}
 	}
 }

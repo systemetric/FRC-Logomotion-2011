@@ -9,13 +9,19 @@ import edu.wpi.first.wpilibj.GenericHID;
 
 public class StrafeDriveController implements Controllable {
 	/** The speed to run the robot at when the trigger is pressed */
-	public static final double CRAWL_FACTOR = 0.5;
-	public static final double SMOOTH_FACTOR = 0.2;
+	public static final double CRAWL_FACTOR  = 0.5;
+
 	/**
 	 * Radius of the circular zone in the middle of the Joystick in which no
 	 * speed is set
 	 */
-	public static final double DEAD_ZONE    = 0.05;
+
+	public static final double DEAD_ZONE     = 0.05;
+
+	/**
+	 * The higher this value the faster the acceleration. Between 1 and 0
+	 */
+	public static final double SMOOTH_FACTOR = 0.2;
 
 	MecanumDrive               drive;
 	VectorSmoother             smoother;
@@ -55,7 +61,7 @@ public class StrafeDriveController implements Controllable {
 		// If trigger is pressed, use fine control
 		if (joystick.getTrigger())
 			driveVector = driveVector.times(CRAWL_FACTOR);
-		
+
 		driveVector = smoother.smooth(driveVector);
 
 		drive.set(driveVector, turnSpeed);

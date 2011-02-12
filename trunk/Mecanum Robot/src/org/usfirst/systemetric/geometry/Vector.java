@@ -29,7 +29,7 @@ public class Vector
 		return new Vector(x / factor, y / factor);
 	}
 
-	public Vector add(Vector that)
+	public Vector plus(Vector that)
 	{
 		return new Vector(x + that.x, y + that.y);
 	}

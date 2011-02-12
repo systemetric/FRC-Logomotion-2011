@@ -1,12 +1,20 @@
 package org.usfirst.systemetric;
 
+import java.util.TimerTask;
+
 import org.usfirst.systemetric.controllers.DriverStationIO;
 import org.usfirst.systemetric.controllers.DriverStationIO.DigitalInput;
 import org.usfirst.systemetric.controllers.DriverStationIO.DigitalOutput;
 
+import com.sun.squawk.util.Arrays;
+
+import edu.wpi.first.testing.Failure;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Watchdog;
 
 public class ControlBoard {
     private static ControlBoard instance;
@@ -31,7 +39,12 @@ public class ControlBoard {
 	
 	public DigitalOutput grabberLED = new DigitalOutput(9);
 	
+	public Timer teleopTimer;
+	public java.util.Timer t2;
+	public TimerTask t;
+	
 	public static ControlBoard getInstance() throws EnhancedIOException {
 		return instance == null ? new ControlBoard() : instance;
+		
 	}
 }

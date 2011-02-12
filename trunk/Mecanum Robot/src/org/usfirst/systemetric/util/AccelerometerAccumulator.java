@@ -29,8 +29,8 @@ public class AccelerometerAccumulator {
 		acceleration = accelerometer.getHorizontalAcceleration().minus(
 				accelerationOffset);
 		
-		velocity = velocity.add(acceleration.times(dt));
-		position = position.add(velocity.times(dt));
+		velocity = velocity.plus(acceleration.times(dt));
+		position = position.plus(velocity.times(dt));
 	}
 	public Vector getAcceleration() {
 		return acceleration;

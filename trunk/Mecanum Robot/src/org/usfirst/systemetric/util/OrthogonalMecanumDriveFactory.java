@@ -8,7 +8,12 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class OrthogonalMecanumDriveFactory {
 
-	static final double SQRT_0_5 = Math.sqrt(0.5);
+	static final double              SQRT_0_5      = Math.sqrt(0.5);
+
+	public static final MecanumDrive DEFAULT_ROBOT = createMecanumDrive(
+	                                                   new Vector(0.55, 0.7),
+	                                                   0.075,
+	                                                   19.0 / 36.0);
 
 	/**
 	 * @param size
