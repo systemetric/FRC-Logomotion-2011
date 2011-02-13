@@ -8,8 +8,10 @@ package org.usfirst.systemetric.robotics.navigation;
 import org.usfirst.systemetric.geometry.Matrix;
 import org.usfirst.systemetric.geometry.Vector;
 
+import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
 
 /**
@@ -51,10 +53,6 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 			Vector wheelVector = transformMatrix.inverse().times(v);
 			return wheelVector.y;
 		}
-
-		public void setSpeed(double speed) {
-			motor.set(speed);
-		}
 	}
 
 	Wheel[]   wheels;
@@ -91,6 +89,8 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	}
 
 	private void update() {
+		final byte syncGroup = 0x02;
+		
 		double[] driveSpeeds = getDriveSpeeds();
 		double[] turnSpeeds = getTurnSpeeds();
 
@@ -102,7 +102,13 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 		driveSpeeds = normalize(driveSpeeds);
 
 		for (int i = 0; i < numWheels; i++)
-			wheels[i].setSpeed(driveSpeeds[i]);
+			wheels[i].motor.set(driveSpeeds[i], syncGroup);
+		
+		try {
+			CANJaguar.updateSyncGroup(syncGroup);
+		} catch (CANTimeoutException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
