@@ -5,7 +5,7 @@ import org.usfirst.systemetric.geometry.Vector;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class OrthogonalMecanumDrive implements HolonomicDrive {
+public class SimpleOrthogonalMecanumDrive implements HolonomicDrive {
 	SpeedController frontRight;
 	SpeedController frontLeft;
 	SpeedController backLeft;
