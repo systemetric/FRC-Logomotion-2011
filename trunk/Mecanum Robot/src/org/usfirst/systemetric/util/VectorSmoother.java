@@ -15,9 +15,10 @@ public class VectorSmoother {
 	public VectorSmoother(double smoothRate) {
 		if (smoothRate > 1 || smoothRate < 0)
 			throw new IllegalArgumentException(
-			    "smooth rate must be between 1 and 0");
+					"smooth rate must be between 1 and 0");
 
 		this.smoothRate = smoothRate;
+		reset();
 	}
 
 	/**
@@ -27,7 +28,10 @@ public class VectorSmoother {
 	 *            the vector to be smoothed
 	 */
 	public void setInput(Vector input) {
-		output = input.times(smoothRate).plus(output.times(1 - smoothRate));
+		if (output == Vector.ZERO)
+			output = input;
+		else
+			output = input.times(smoothRate).plus(output.times(1 - smoothRate));
 
 	}
 
