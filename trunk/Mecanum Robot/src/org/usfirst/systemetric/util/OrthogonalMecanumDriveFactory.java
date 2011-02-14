@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class OrthogonalMecanumDriveFactory {
 
-	static final double SQRT_0_5 = Math.sqrt(0.5);
+	static final double              SQRT_0_5      = Math.sqrt(0.5);
 
-	public static final MecanumDrive DEFAULT_ROBOT = createMecanumDrive(
-			new Vector(0.55, 0.7), 0.075, 19.0 / 36.0);
+	public static final MecanumDrive DEFAULT_ROBOT = createMecanumDrive(new Vector(0.55, 0.7),
+	                                                   0.075, 19.0 / 36.0);
 
 	/**
 	 * @param size
@@ -26,13 +26,15 @@ public class OrthogonalMecanumDriveFactory {
 	 * @throws RuntimeException
 	 *             When the CAN Bus does not function
 	 */
-	public static MecanumDrive createMecanumDrive(Vector size,
-			double wheelRadius, double gearRatio) throws RuntimeException {
+	public static MecanumDrive createMecanumDrive(Vector size, double wheelRadius, double gearRatio)
+	    throws RuntimeException {
 		double wheelCircumference = wheelRadius * 2 * Math.PI;
-		double distancePerRotation = wheelCircumference * gearRatio * 60;
-		
-		return createMecanumDrive(size, distancePerRotation,
-				ControlMode.kPercentVbus);
+		double distancePerRotation = wheelCircumference * gearRatio;
+
+		// handle RPS / RPM conversion
+		distancePerRotation /= 60;
+
+		return createMecanumDrive(size, distancePerRotation, ControlMode.kSpeed);
 	}
 
 	/**
@@ -43,13 +45,11 @@ public class OrthogonalMecanumDriveFactory {
 	 * @throws RuntimeException
 	 *             When the CAN Bus does not function
 	 */
-	public static MecanumDrive createMecanumDrive(Vector size)
-			throws RuntimeException {
+	public static MecanumDrive createMecanumDrive(Vector size) throws RuntimeException {
 		return createMecanumDrive(size, 1, ControlMode.kPercentVbus);
 	}
 
-	static MecanumDrive createMecanumDrive(Vector size,
-			double distancePerRotation, ControlMode mode) {
+	static MecanumDrive createMecanumDrive(Vector size, double distancePerRotation, ControlMode mode) {
 
 		Vector rightDriveVector = new Vector(0, distancePerRotation);
 		Vector leftDriveVector = new Vector(0, -distancePerRotation);
@@ -59,37 +59,34 @@ public class OrthogonalMecanumDriveFactory {
 		int motorCount = 0;
 		try {
 
-			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(offset.x,
-					offset.y), rightDriveVector,
-					new Vector(SQRT_0_5, SQRT_0_5), JaguarFactory.createJaguar(
-							2, mode));
+			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(offset.x, offset.y),
+			    rightDriveVector, new Vector(SQRT_0_5, SQRT_0_5), JaguarFactory.createJaguar(2,
+			        mode));
 
 			motorCount++;
 
-			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(offset.x,
-					-offset.y), rightDriveVector, new Vector(SQRT_0_5,
-					-SQRT_0_5), JaguarFactory.createJaguar(3, mode));
+			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(offset.x, -offset.y),
+			    rightDriveVector, new Vector(SQRT_0_5, -SQRT_0_5), JaguarFactory.createJaguar(3,
+			        mode));
 
 			motorCount++;
 
-			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(-offset.x,
-					-offset.y), leftDriveVector, new Vector(-SQRT_0_5,
-					-SQRT_0_5), JaguarFactory.createJaguar(4, mode));
+			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(-offset.x, -offset.y),
+			    leftDriveVector, new Vector(-SQRT_0_5, -SQRT_0_5), JaguarFactory.createJaguar(4,
+			        mode));
 
 			motorCount++;
 
-			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(-offset.x,
-					offset.y), leftDriveVector,
-					new Vector(-SQRT_0_5, SQRT_0_5),
-					JaguarFactory.createJaguar(5, mode));
+			wheels[motorCount] = new MecanumDrive.Wheel(new Vector(-offset.x, offset.y),
+			    leftDriveVector, new Vector(-SQRT_0_5, SQRT_0_5), JaguarFactory.createJaguar(5,
+			        mode));
 
 			motorCount++;
 
 			return new MecanumDrive(wheels);
 
 		} catch (CANTimeoutException e) {
-			throw new RuntimeException("Could only connect " + motorCount
-					+ " Jaguar(s)");
+			throw new RuntimeException("Could only connect " + motorCount + " Jaguar(s)");
 		}
 	}
 }
