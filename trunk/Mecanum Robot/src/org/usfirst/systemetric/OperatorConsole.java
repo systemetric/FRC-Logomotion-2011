@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Watchdog;
 
-public class ControlBoard {
-    private static ControlBoard instance;
+public class OperatorConsole {
+    private static OperatorConsole instance;
     
-	private ControlBoard() throws EnhancedIOException {
+	private OperatorConsole() throws EnhancedIOException {
 	}
 	
 	public GenericHID driveJoystick = new Joystick(1);
@@ -43,8 +43,8 @@ public class ControlBoard {
 	public java.util.Timer t2;
 	public TimerTask t;
 	
-	public static ControlBoard getInstance() throws EnhancedIOException {
-		return instance == null ? new ControlBoard() : instance;
+	public static OperatorConsole getInstance() throws EnhancedIOException {
+		return instance == null ? new OperatorConsole() : instance;
 		
 	}
 }

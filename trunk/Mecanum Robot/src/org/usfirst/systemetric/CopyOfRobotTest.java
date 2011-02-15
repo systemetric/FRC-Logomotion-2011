@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class CopyOfRobotTest extends IterativeRobot {
 	GenericHID driveJoystick;
-	ControlBoard cb;
+	OperatorConsole cb;
 	DriverStationEnhancedIO io;
 	ADXL345_I2C accelerometer;
 	AccelerometerAccumulator accumulator;
@@ -66,7 +66,7 @@ public class CopyOfRobotTest extends IterativeRobot {
 		DriverStationLCD.getInstance().updateLCD();
 
 		try {
-			cb = ControlBoard.getInstance();
+			cb = OperatorConsole.getInstance();
 		} catch (EnhancedIOException e) {
 			System.out.println("Could not establish connection to PSoC board");
 			e.printStackTrace();
