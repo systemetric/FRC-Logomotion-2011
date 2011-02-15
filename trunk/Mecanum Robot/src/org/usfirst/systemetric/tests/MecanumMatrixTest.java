@@ -4,6 +4,9 @@ import org.usfirst.systemetric.geometry.Matrix;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive.Wheel;
+import org.usfirst.systemetric.sensors.LineTracer.Detector;
+
+import com.sun.squawk.util.Comparer;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
@@ -54,6 +57,20 @@ public class MecanumMatrixTest {
 	}
 
 	public static void main(String[] args) {
+		Double d = new Double(2);
+		
+		(new Comparer() {
+            public int compare(Object a, Object b) {
+            	System.out.println("Aww");
+	            return 0;
+            }
+            public int compare(Double a, Double b) {
+            	System.out.println("Good");
+	            return (int) Math.ceil(a.doubleValue() - b.doubleValue());
+            }
+		}).compare(d, d);
+		
+		
 		Wheel[] wheels = new Wheel[4];
 
 		wheels[0] = new Wheel(new Vector(10, 10), new Vector(0, 10),
@@ -68,7 +85,7 @@ public class MecanumMatrixTest {
 		wheels[3] = new Wheel(new Vector(-10, 10), new Vector(0, 10),
 		    new Vector(-1, 1), new TestJaguar(" FrontLeft"));
 
-		MecanumDrive d = new MecanumDrive(wheels);
+		MecanumDrive d2 = new MecanumDrive(wheels);
 
 		System.out.println("-----------------");
 	}

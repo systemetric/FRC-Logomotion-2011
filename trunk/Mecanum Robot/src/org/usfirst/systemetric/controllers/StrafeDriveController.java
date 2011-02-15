@@ -1,6 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
-import org.usfirst.systemetric.ControlBoard;
+import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.util.VectorSmoother;
@@ -21,7 +21,7 @@ public class StrafeDriveController implements Controllable {
 	/**
 	 * The higher this value the faster the acceleration. Between 1 and 0
 	 */
-	public static final double SMOOTH_FACTOR = 0.2;
+	public static final double SMOOTH_FACTOR = 1;//0.2;
 
 	MecanumDrive               drive;
 	VectorSmoother             smoother;
@@ -49,12 +49,17 @@ public class StrafeDriveController implements Controllable {
 		}
 	}
 
-	public void controlWith(ControlBoard cb) {
+	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.driveJoystick;
 
 		// Get information from joystick
 		Vector driveVector = new Vector(joystick.getX(), joystick.getY());
-		double turnSpeed = joystick.getTwist();
+		//double turnSpeed = joystick.getTwist();
+		
+		boolean left = joystick.getRawButton(4);
+		boolean right = joystick.getRawButton(5);
+		
+		double turnSpeed = left ? -1 : right ? 1 : 0;
 
 		driveVector = addDeadZone(driveVector);
 

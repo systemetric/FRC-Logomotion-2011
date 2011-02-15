@@ -1,6 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
-import org.usfirst.systemetric.ControlBoard;
+import org.usfirst.systemetric.OperatorConsole;
 
 public interface Controllable {
 
@@ -9,5 +9,5 @@ public interface Controllable {
 	 * 
 	 * @param cb The ControlBoard object to operate the robot with
 	 */
-	public void controlWith(ControlBoard cb);
+	public void controlWith(OperatorConsole cb);
 }

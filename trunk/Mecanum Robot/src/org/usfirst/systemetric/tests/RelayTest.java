@@ -3,7 +3,6 @@ package org.usfirst.systemetric.tests;
 import org.usfirst.systemetric.controllers.Controllable;
 import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.geometry.Vector;
-import org.usfirst.systemetric.robotics.BaseRobot;
 import org.usfirst.systemetric.robotics.Grabber;
 
 import edu.wpi.first.wpilibj.Relay.Direction;
