@@ -1,15 +1,14 @@
 package org.usfirst.systemetric.robotics;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
+import edu.wpi.first.wpilibj.CANJaguar.PositionReference;
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
 
 public class Arm implements IMechanism {
+	public final static double encoderRevsPerMetre = 63.0 / 13;
+	
 	public static class PegPosition {
 		final int BOTTOM = 1;
 		final int BOTTOM_OFFSET = 2;
@@ -17,102 +16,20 @@ public class Arm implements IMechanism {
 		final int MIDDLE_OFFSET = 4;
 		final int TOP_OFFSET = 6;
 	}
-
-	Encoder encoder;
-	SpeedController motors;
-
-	DigitalInput bottomLimit;
-	DigitalInput topLimit;
 	
-	PIDController x;
+	CANJaguar jag;
 	
-    java.util.Timer m_controlLoop = new Timer();
-    
-    boolean canGoUp = true;
-    boolean canGoDown = true;
-
-	public Arm(Encoder encoder, SpeedController leftMotor,
-			SpeedController rightMotor, DigitalInput bottomLimit,
-			DigitalInput topLimit) {
-		
-		motors = new Motors(leftMotor, rightMotor);
-		m_controlLoop.schedule(new ArmSafetyTask(), 0, 20);
-		
-		this.encoder = encoder;
-		this.bottomLimit = bottomLimit;
-		this.topLimit = topLimit;
+	public Arm(int canId) throws CANTimeoutException {
+		jag = new CANJaguar(canId, ControlMode.kPosition);
+        jag.setPositionReference(PositionReference.kQuadEncoder);
+		jag.configEncoderCodesPerRev(6);
+		jag.setPID(100, 0.01, 0);
+		jag.enableControl();
 	}
 	
-	public void setSpeed(double speed) {
-		if(speed > 0 && canGoUp || speed < 0 && canGoDown) {
-			motors.set(speed);
-			//System.out.println("Going at "+speed);
-		}
-		else {
-			motors.disable();
-			//System.out.println("Illegal!");
-		}
-		
-	}
-
-	public void goToHeight(int encoderCount) {
-
-	}
-
-	private class Motors implements SpeedController, IMechanism {
-		SpeedController leftMotor;
-		SpeedController rightMotor;
-
-		public Motors(SpeedController leftMotor, SpeedController rightMotor) {
-			this.leftMotor = leftMotor;
-			this.rightMotor = rightMotor;
-		}
-
-		public void pidWrite(double output) {
-			leftMotor.pidWrite(output);
-			rightMotor.pidWrite(output);
-		}
-
-		public double get() {
-			return (leftMotor.get() + rightMotor.get()) / 2;
-		}
-
-		public void set(double speed, byte syncGroup) {
-			leftMotor.set(speed, syncGroup);
-			rightMotor.set(speed, syncGroup);
-
-		}
-
-		public void set(double speed) {
-			leftMotor.set(speed);
-			rightMotor.set(speed);
-
-		}
-
-		public void disable() {
-			leftMotor.disable();
-			rightMotor.disable();
-
-		}
-
-	}
-
-	private class ArmSafetyTask extends TimerTask {
-		public void run() {
-			canGoDown = !bottomLimit.get();
-			canGoUp = !topLimit.get();
-			System.out.println("Down:"+canGoDown+", Up:"+canGoUp);
-			
-			if(!canGoDown && motors.get() < 0) {
-				//Motor is going down
-				motors.disable();
-				//encoder.reset();
-			}
-			if(!canGoUp && motors.get() > 0) {
-				//Motor is going up
-				motors.disable();
-			}
-		}
+	public void moveTo(double height) {
+		height = Math.max(0, height);
+		jag.set(encoderRevsPerMetre * height);
 	}
 
 }
