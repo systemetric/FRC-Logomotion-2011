@@ -5,16 +5,25 @@ import org.usfirst.systemetric.geometry.Vector;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
+/**
+ * A class for a standard Mecanum drive where the wheels are arranged
+ * orthogonally. Should use more optimized calculations
+ * 
+ * TODO: Make this actually work! Use {@link MecanumDrive} instead!
+ * 
+ * @author Eric
+ * 
+ */
 public class SimpleOrthogonalMecanumDrive implements HolonomicDrive {
 	SpeedController frontRight;
 	SpeedController frontLeft;
 	SpeedController backLeft;
 	SpeedController backRight;
 
-	Vector direction;
-	double heading;
+	Vector          direction;
+	double          heading;
 
-	Vector wheelbaseSize;
+	Vector          wheelbaseSize;
 
 	public void setDirection(Vector direction) {
 		this.direction = direction;
@@ -37,12 +46,12 @@ public class SimpleOrthogonalMecanumDrive implements HolonomicDrive {
 
 	public void setDriveVelocity(Vector driveVelocity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setTurnVelocity(double turnVelocity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

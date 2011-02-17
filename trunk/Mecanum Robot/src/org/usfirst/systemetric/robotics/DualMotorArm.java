@@ -9,50 +9,55 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
 
+/**
+ * Class to control an arm using two motors for power. Not tested. May not
+ * actually work
+ * 
+ * @author Eric
+ * 
+ */
 public class DualMotorArm implements IMechanism {
 	public static class PegPosition {
-		final int BOTTOM = 1;
+		final int BOTTOM        = 1;
 		final int BOTTOM_OFFSET = 2;
-		final int MIDDLE = 3;
+		final int MIDDLE        = 3;
 		final int MIDDLE_OFFSET = 4;
-		final int TOP_OFFSET = 6;
+		final int TOP_OFFSET    = 6;
 	}
 
-	Encoder encoder;
+	Encoder         encoder;
 	SpeedController motors;
 
-	DigitalInput bottomLimit;
-	DigitalInput topLimit;
-	
-	PIDController x;
-	
-    java.util.Timer m_controlLoop = new Timer();
-    
-    boolean canGoUp = true;
-    boolean canGoDown = true;
+	DigitalInput    bottomLimit;
+	DigitalInput    topLimit;
 
-	public DualMotorArm(Encoder encoder, SpeedController leftMotor,
-			SpeedController rightMotor, DigitalInput bottomLimit,
-			DigitalInput topLimit) {
-		
+	PIDController   x;
+
+	java.util.Timer m_controlLoop = new Timer();
+
+	boolean         canGoUp       = true;
+	boolean         canGoDown     = true;
+
+	public DualMotorArm(Encoder encoder, SpeedController leftMotor, SpeedController rightMotor,
+	    DigitalInput bottomLimit, DigitalInput topLimit) {
+
 		motors = new Motors(leftMotor, rightMotor);
 		m_controlLoop.schedule(new ArmSafetyTask(), 0, 20);
-		
+
 		this.encoder = encoder;
 		this.bottomLimit = bottomLimit;
 		this.topLimit = topLimit;
 	}
-	
+
 	public void setSpeed(double speed) {
-		if(speed > 0 && canGoUp || speed < 0 && canGoDown) {
+		if (speed > 0 && canGoUp || speed < 0 && canGoDown) {
 			motors.set(speed);
-			//System.out.println("Going at "+speed);
-		}
-		else {
+			// System.out.println("Going at "+speed);
+		} else {
 			motors.disable();
-			//System.out.println("Illegal!");
+			// System.out.println("Illegal!");
 		}
-		
+
 	}
 
 	public void goToHeight(int encoderCount) {
@@ -101,15 +106,15 @@ public class DualMotorArm implements IMechanism {
 		public void run() {
 			canGoDown = !bottomLimit.get();
 			canGoUp = !topLimit.get();
-			System.out.println("Down:"+canGoDown+", Up:"+canGoUp);
-			
-			if(!canGoDown && motors.get() < 0) {
-				//Motor is going down
+			System.out.println("Down:" + canGoDown + ", Up:" + canGoUp);
+
+			if (!canGoDown && motors.get() < 0) {
+				// Motor is going down
 				motors.disable();
-				//encoder.reset();
+				// encoder.reset();
 			}
-			if(!canGoUp && motors.get() > 0) {
-				//Motor is going up
+			if (!canGoUp && motors.get() > 0) {
+				// Motor is going up
 				motors.disable();
 			}
 		}

@@ -3,7 +3,6 @@ package org.usfirst.systemetric.robotics;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.usfirst.systemetric.robotics.CopyOfArm.PegPosition;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
@@ -12,13 +11,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
 
-public class CopyOfArm implements IMechanism {
+public class PositionControlledArm implements IMechanism {
 	// Chain pitch = 8mm
 	public final static double metresPerEncoderRev = 0.008 * 13;
 	public final static double heightTolerance     = 0.1;
 
 	volatile PegPosition       targetPosition      = null;
 	java.util.Timer            controlLoop         = new Timer();
+	
 	public CANJaguar           jag;
 	double                     positionOffset      = 0;
 
@@ -45,54 +45,24 @@ public class CopyOfArm implements IMechanism {
 		}
 	}
 
-	public CopyOfArm(int canId) throws CANTimeoutException {
+	public PositionControlledArm(int canId) throws CANTimeoutException {
 		jag = new CANJaguar(canId);
-		disablePositionControl();
+		
+		jag.changeControlMode(ControlMode.kPosition);
+		jag.setPositionReference(PositionReference.kQuadEncoder);
+		jag.configEncoderCodesPerRev(6);
+		jag.setPID(100, 0.05, 0);
+		jag.configMaxOutputVoltage(12);
+		jag.enableControl();
+		
 		controlLoop.schedule(new ArmTask(), 0, 20);
 
 	}
 
-	private void enablePositionControl(PegPosition target) throws CANTimeoutException {
-		if (targetPosition == null) {
-			jag.changeControlMode(ControlMode.kPosition);
-			jag.setPositionReference(PositionReference.kQuadEncoder);
-			jag.configEncoderCodesPerRev(6);
-			jag.setPID(100, 0.05, 0);
-			jag.configMaxOutputVoltage(12);
-			jag.enableControl();
-			
-			targetPosition = target;
-		}
-	}
-
-	private void disablePositionControl() throws CANTimeoutException {
-		if(targetPosition != null) {
-    		jag.disableControl();
-    		jag.changeControlMode(ControlMode.kPercentVbus);
-    		jag.setVoltageRampRate(24);
-    		jag.configMaxOutputVoltage(12);
-    		jag.enableControl();
-    		targetPosition = null;
-		}
-	}
-
-	public void setSpeed(double speed) throws CANTimeoutException {
-		System.out.println("Trying to set speed...");
-		synchronized (controlLoop) {
-			System.out.println("Set speed to " + speed);
-			disablePositionControl();
-			targetPosition = null;
-			jag.setX(speed);
-		}
-	}
 
 	public void moveTo(PegPosition position) throws CANTimeoutException {
-		System.out.println("Trying to set position...");
-		synchronized (controlLoop) {
-			enablePositionControl(position);
-			targetPosition = position;
-			System.out.println("Set position to " + position.height);
-		}
+		targetPosition = position;
+		System.out.println("Set position to " + position.height);
 	}
 
 	public double getHeight() throws CANTimeoutException {
@@ -129,22 +99,20 @@ public class CopyOfArm implements IMechanism {
 			
 			try {
 				handleLimits();
-				/*synchronized (this) {
-					if (targetPosition != null) {
-						double position = jag.getPosition() - positionOffset;
+				
+				if (targetPosition != null) {
+					double positionError = getHeight() - targetPosition.height;
 
-						boolean inPosition = Math.abs(position - targetPosition.encoderCount)
-						    * metresPerEncoderRev < heightTolerance;
+					boolean inPosition = Math.abs(positionError) < heightTolerance;
 
-						if (inPosition) {
-							targetPosition = null;
-							jag.configMaxOutputVoltage(0);
-						} else if (!inPosition) {
-							jag.configMaxOutputVoltage(12);
-							jag.setX(targetPosition.encoderCount + positionOffset);
-						}
+					if (inPosition) {
+						targetPosition = null;
+						jag.configMaxOutputVoltage(0);
+					} else if (!inPosition) {
+						jag.configMaxOutputVoltage(12);
+						jag.setX(targetPosition.encoderCount + positionOffset);
 					}
-				}*/
+				}
 			} catch (CANTimeoutException e) {
 				e.printStackTrace();
 			}

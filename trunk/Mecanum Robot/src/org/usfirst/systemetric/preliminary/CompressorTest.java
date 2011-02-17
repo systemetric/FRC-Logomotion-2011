@@ -1,4 +1,4 @@
-package org.usfirst.systemetric.tests;
+package org.usfirst.systemetric.preliminary;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;

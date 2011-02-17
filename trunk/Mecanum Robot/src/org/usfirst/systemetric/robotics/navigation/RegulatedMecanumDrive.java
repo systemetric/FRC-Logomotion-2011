@@ -7,7 +7,13 @@ import org.usfirst.systemetric.util.HeadingFinder;
 
 import edu.wpi.first.wpilibj.PIDController;
 
-public class RegulatedMecanumDrive extends MecanumDrive {
+/**
+ * Allows a {@link MecanumDrive} to have its heading regulated and maintained by using an {@link AngleFinder}.
+ * 
+ * @author Eric
+ *
+ */
+public class RegulatedMecanumDrive extends MecanumDrive implements RegulatedHolonomicDrive {
 	HeadingFinder finder;
 	PIDController controller;
 	Vector driveVelocity;

@@ -62,11 +62,23 @@ public class LineTracer implements PIDSource, ISensor {
 	 *            The line sensors
 	 */
 	public LineTracer(DigitalInput[] sensors) {
+		this(sensors, 2);
+	}
+	
+	/**
+	 * Create a LineTracer object from a set of evenly spaced sensors spanning a specified width
+	 * 
+	 * @param sensors
+	 *            The line sensors
+	 * @param width
+	 *            The distance between the two outermost sensors
+	 */
+	public LineTracer(DigitalInput[] sensors, double width) {
 		int numSensors = sensors.length;
 		detectors = new Detector[numSensors];
 
 		for (int i = 0; i < sensors.length; i++) {
-			detectors[i] = new Detector(2 * i / (numSensors - 1) - 1, sensors[i]);
+			detectors[i] = new Detector(width * i / (numSensors - 1) - width/2, sensors[i]);
 		}
 	}
 

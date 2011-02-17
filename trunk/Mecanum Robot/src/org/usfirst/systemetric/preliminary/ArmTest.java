@@ -1,4 +1,4 @@
-package org.usfirst.systemetric.tests;
+package org.usfirst.systemetric.preliminary;
 
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.controllers.ArmController;

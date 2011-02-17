@@ -1,4 +1,4 @@
-package org.usfirst.systemetric.tests;
+package org.usfirst.systemetric.preliminary;
 
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
