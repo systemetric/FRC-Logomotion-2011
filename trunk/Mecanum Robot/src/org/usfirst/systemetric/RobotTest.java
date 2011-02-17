@@ -1,7 +1,7 @@
 package org.usfirst.systemetric;
 
 import org.usfirst.systemetric.controllers.*;
-import org.usfirst.systemetric.robotics.Arm;
+import org.usfirst.systemetric.robotics.DualMotorArm;
 import org.usfirst.systemetric.robotics.Grabber;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 
@@ -28,13 +28,13 @@ public class RobotTest extends IterativeRobot {
 	ADXL345_I2C accelerometer;
 	AccelerometerAccumulator accumulator;
 	HiTechnicCompass compass;
-	Arm arm;
+	DualMotorArm arm;
 	Encoder a;
 
 	CANJaguar jag;
 	MecanumDrive mecanumDrive;
 
-	Controllable grabberController = new GrabberController(new Grabber(1, 2));
+	Controller grabberController = new GrabberController(new Grabber(1, 2));
 
 	// Controllable driveController = new DriveController(mecanumDrive);
 

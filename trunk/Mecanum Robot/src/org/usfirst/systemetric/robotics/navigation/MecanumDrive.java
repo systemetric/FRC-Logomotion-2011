@@ -88,7 +88,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 		update();
 	}
 
-	private void update() {
+	protected void update() {
 		final byte syncGroup = 0x02;
 		
 		double[] driveSpeeds = getDriveSpeeds();
@@ -118,7 +118,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	 * @param speeds
 	 * @return normalized speeds
 	 */
-	private double[] normalize(double[] speeds, double maxSpeed, boolean scale) {
+	protected double[] normalize(double[] speeds, double maxSpeed, boolean scale) {
 		
 		maxSpeed = maxSpeed > MAX_SPEED ? MAX_SPEED : Math.abs(maxSpeed);
 
@@ -134,7 +134,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 		return speeds;
 	}
 
-	private double[] normalize(double speeds[]) {
+	protected double[] normalize(double speeds[]) {
 		return normalize(speeds, MAX_SPEED, false);
 	}
 
@@ -146,7 +146,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 	 *            angle to turn by
 	 * @return Array of Vectors representing wheel motion
 	 */
-	private double[] getTurnSpeeds() {
+	protected double[] getTurnSpeeds() {
 		double[] turnSpeeds = new double[numWheels];
 
 		for (int i = 0; i < numWheels; i++) {
@@ -158,7 +158,7 @@ public class MecanumDrive implements HolonomicDrive, PIDOutput {
 		return turnSpeeds;
 	}
 
-	private double[] getDriveSpeeds() {
+	protected double[] getDriveSpeeds() {
 		double[] driveSpeeds = new double[numWheels];
 
 		for (int i = 0; i < numWheels; i++)

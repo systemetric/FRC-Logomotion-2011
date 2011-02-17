@@ -7,9 +7,10 @@ import org.usfirst.systemetric.util.VectorSmoother;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
-public class StrafeDriveController implements Controllable {
+public class StrafeDriveController implements Controller {
 	/** The speed to run the robot at when the trigger is pressed */
 	public static final double CRAWL_FACTOR  = 0.5;
+	public static final double ZOOM_FACTOR  = 1.5;
 
 	/**
 	 * Radius of the circular zone in the middle of the Joystick in which no
@@ -21,7 +22,7 @@ public class StrafeDriveController implements Controllable {
 	/**
 	 * The higher this value the faster the acceleration. Between 1 and 0
 	 */
-	public static final double SMOOTH_FACTOR = 1;//0.2;
+	public static final double SMOOTH_FACTOR = 0.05;
 
 	MecanumDrive               drive;
 	VectorSmoother             smoother;
@@ -53,19 +54,17 @@ public class StrafeDriveController implements Controllable {
 		GenericHID joystick = cb.driveJoystick;
 
 		// Get information from joystick
-		Vector driveVector = new Vector(joystick.getX(), joystick.getY());
-		//double turnSpeed = joystick.getTwist();
-		
-		boolean left = joystick.getRawButton(4);
-		boolean right = joystick.getRawButton(5);
-		
-		double turnSpeed = left ? -1 : right ? 1 : 0;
+		Vector driveVector = new Vector(-joystick.getX(), joystick.getY());
+		double turnSpeed = -joystick.getTwist();
 
 		driveVector = addDeadZone(driveVector);
 
 		// If trigger is pressed, use fine control
 		if (joystick.getTrigger())
 			driveVector = driveVector.times(CRAWL_FACTOR);
+		else if(joystick.getRawButton(2))
+			driveVector = driveVector.times(ZOOM_FACTOR);
+			
 
 		driveVector = smoother.smooth(driveVector);
 

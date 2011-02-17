@@ -6,7 +6,7 @@ import org.usfirst.systemetric.robotics.Grabber;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SmartDashboard;
 
-public class GrabberController implements Controllable {
+public class GrabberController implements Controller {
 	static final int TILT_TOGGLE_BUTTON = 3;
 	static final int GRAB_TOGGLE_BUTTON = 1; //Trigger
 	Grabber grabber;
@@ -34,6 +34,6 @@ public class GrabberController implements Controllable {
 			grabber.toggleTilt();
 			tiltToggled = true;
 		}
-		SmartDashboard.log(grabber.isUp()/* ? "Up" : "Down"*/, "Tilt state");
+		SmartDashboard.log(grabber.isUp() ? "Up" : "Down", "Tilt state");
 	}
 }

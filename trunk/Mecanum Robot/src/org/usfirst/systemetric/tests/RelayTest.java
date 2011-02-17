@@ -1,6 +1,6 @@
 package org.usfirst.systemetric.tests;
 
-import org.usfirst.systemetric.controllers.Controllable;
+import org.usfirst.systemetric.controllers.Controller;
 import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.Grabber;
@@ -23,7 +23,7 @@ public class RelayTest extends SimpleRobot {
 	DriverStationLCD lcd               = DriverStationLCD.getInstance();
 	GenericHID       driveJoystick     = new Joystick(1);
 
-	Controllable     grabberController = new GrabberController(
+	Controller     grabberController = new GrabberController(
 	                                       new Grabber(0, 1));
 
 	Relay            relay             = new Relay(2, Direction.kForward);

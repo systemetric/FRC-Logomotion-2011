@@ -2,7 +2,7 @@ package org.usfirst.systemetric.controllers;
 
 import org.usfirst.systemetric.OperatorConsole;
 
-public interface Controllable {
+public interface Controller {
 
 	/**
 	 * Gives the controller control of the robot
