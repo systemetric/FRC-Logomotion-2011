@@ -23,15 +23,13 @@ public class RelayTest extends SimpleRobot {
 	DriverStationLCD lcd               = DriverStationLCD.getInstance();
 	GenericHID       driveJoystick     = new Joystick(1);
 
-	Controller     grabberController = new GrabberController(
-	                                       new Grabber(0, 1));
+	Controller       grabberController = new GrabberController(new Grabber(0, 1));
 
 	Relay            relay             = new Relay(2, Direction.kForward);
 
 	public void operatorControl() {
 		while (isOperatorControl()) {
-			boolean trigger = new Vector(driveJoystick.getX(),
-			    driveJoystick.getY()).length() > 0.5;
+			boolean trigger = new Vector(driveJoystick.getX(), driveJoystick.getY()).length() > 0.5;
 			// driveJoystick.getTrigger();
 			lcd.println(Line.kUser3, 1, trigger ? "Pushed  " : "Released");
 			lcd.updateLCD();

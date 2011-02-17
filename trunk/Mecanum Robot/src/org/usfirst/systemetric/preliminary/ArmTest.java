@@ -13,21 +13,20 @@ public class ArmTest extends IterativeRobot{
 	Arm arm;
 	
 	public void robotInit() {
-		try {
 			arm = new Arm(6);
 			armController = new ArmController(arm);
-        } catch (CANTimeoutException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        }
 	}
 	
 	public void teleopPeriodic() {
 		try {
 			armController.controlWith(OperatorConsole.getInstance());
-	        System.out.println(arm.getHeight());
+	        //System.out.println(arm.getHeight());
+			System.out.println(arm.jag.getOutputVoltage() + ", " + arm.jag.getOutputCurrent());
 	        
         } catch (Exception e) {
+        	
+        	
+        	
 	        e.printStackTrace();
         }
 	}

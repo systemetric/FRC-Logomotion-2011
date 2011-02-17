@@ -20,19 +20,17 @@ public class BaseRobot {
 	LineTracer lineSensor;
 	public BaseRobot() {
 	    drive = OrthogonalMecanumDriveFactory.DEFAULT_ROBOT;
-	    try {
-	        arm = new Arm(6);
-        } catch (CANTimeoutException e) {
-	        throw new RuntimeException("The arm could not be connected");
-        }
+	    
+	    //Create the arm
+	    arm = new Arm(6);
         
         //Create the grabber
-        grabber = new Grabber(1, 2);
+        grabber = new Grabber(2, 1);
 
         //Create the grabber
         lineSensor = new LineTracer(new DigitalInput[] {}, 35); 
         
-        /*TODO: wire up compressor*/
-        compressor = new Compressor(0 , 0);
+        //Create the compressor
+        compressor = new Compressor(1, 1);
     }
 }

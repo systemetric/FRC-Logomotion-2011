@@ -47,54 +47,21 @@ public class Arm implements IMechanism {
 		}
 	}
 
-	public Arm(int canId) throws CANTimeoutException {
-		jag = new CANJaguar(canId);
+	public Arm(int canId) {
+		try {
+			jag = new CANJaguar(canId, ControlMode.kPercentVbus);
+	        jag.setVoltageRampRate(24);
+			jag.configMaxOutputVoltage(12);
 
-		controlLoop.schedule(new ArmTask(), 0, 20);
-
+        } catch (CANTimeoutException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }
 	}
-
-	private void enablePositionControl() throws CANTimeoutException {
-		if (controlMode == ControlMode.kPosition)
-			return;
-		controlMode = ControlMode.kPosition;
-
-		jag.changeControlMode(controlMode);
-		jag.setPositionReference(PositionReference.kQuadEncoder);
-		jag.configEncoderCodesPerRev(6);
-		jag.setPID(100, 0.05, 0);
-		jag.configMaxOutputVoltage(12);
-		jag.enableControl();
-	}
-
-	private void disablePositionControl() throws CANTimeoutException {
-		if (controlMode != ControlMode.kPosition)
-			return;
-		controlMode = ControlMode.kPercentVbus;
-
-		jag.changeControlMode(controlMode);
-		jag.setVoltageRampRate(24);
-		jag.configMaxOutputVoltage(12);
-		jag.disableControl();
-	}
-
 	public void setSpeed(double speed) throws CANTimeoutException {
 		System.out.println("Set speed to " + speed);
-		disablePositionControl();
-		targetPosition = Double.NaN;
 		jag.setX(speed);
 	}
-
-	public void moveTo(PegPosition position) throws CANTimeoutException {
-		targetPosition = position.encoderCount;
-		System.out.println("Set position to " + position.height);
-		enablePositionControl();
-	}
-	
-	public double getHeight() throws CANTimeoutException {
-		return metresPerEncoderRev * (jag.getPosition() - positionOffset);
-	}
-
 	private class ArmTask extends TimerTask {
 		boolean enabled        = true;
 

@@ -22,7 +22,7 @@ public class StrafeDriveController implements Controller {
 	/**
 	 * The higher this value the faster the acceleration. Between 1 and 0
 	 */
-	public static final double SMOOTH_FACTOR = 0.05;
+	public static final double SMOOTH_FACTOR = 0.1;
 
 	MecanumDrive               drive;
 	VectorSmoother             smoother;
@@ -49,6 +49,18 @@ public class StrafeDriveController implements Controller {
 			return vector.minus(deadZoneOffset).times(multiplyFactor);
 		}
 	}
+	
+	private double addDeadZone(double d) {
+		double magnitude = Math.abs(d);
+
+		if (d > DEAD_ZONE) {
+			return (d - DEAD_ZONE) / (1 - DEAD_ZONE);
+		} else if (d < -DEAD_ZONE) {
+			return (d + DEAD_ZONE) / (1 - DEAD_ZONE);
+		} else {
+			return 0;
+		}
+	}
 
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.driveJoystick;
@@ -58,6 +70,7 @@ public class StrafeDriveController implements Controller {
 		double turnSpeed = -joystick.getTwist();
 
 		driveVector = addDeadZone(driveVector);
+		turnSpeed = addDeadZone(turnSpeed);
 
 		// If trigger is pressed, use fine control
 		if (joystick.getTrigger())
