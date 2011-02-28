@@ -17,14 +17,16 @@ public class ArmController {
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.armJoystick;
 		PegPosition position = null;
-		
-		if (true || joystick.getTrigger())
+		if (true || joystick.getTrigger()) { //this is the original code
+		//if (joystick.getTrigger()) {
 			try {
 				arm.setSpeed(-joystick.getY());
 			} catch (CANTimeoutException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
 		else {
 			if (joystick.getRawButton(11))
 				position = PegPosition.BOTTOM;
@@ -35,14 +37,11 @@ public class ArmController {
 			else if (joystick.getRawButton(10))
 				position = PegPosition.MIDDLE_OFFSET;
 
-			/*if (position != null)
-				try {
-					//arm.moveTo(position);
-				} catch (CANTimeoutException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
+			/*
+			 * if (position != null) try { //arm.moveTo(position); } catch
+			 * (CANTimeoutException e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); }
+			 */
 		}
 	}
-
 }

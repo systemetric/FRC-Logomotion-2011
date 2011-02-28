@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 public class StrafeDriveController implements Controller {
 	/** The speed to run the robot at when the trigger is pressed */
 	public static final double CRAWL_FACTOR  = 0.5;
-	public static final double ZOOM_FACTOR  = 1.5;
+	public static final double ZOOM_FACTOR   = 1.5;
 
 	/**
 	 * Radius of the circular zone in the middle of the Joystick in which no
@@ -49,7 +49,7 @@ public class StrafeDriveController implements Controller {
 			return vector.minus(deadZoneOffset).times(multiplyFactor);
 		}
 	}
-	
+
 	private double addDeadZone(double d) {
 		double magnitude = Math.abs(d);
 
@@ -61,6 +61,13 @@ public class StrafeDriveController implements Controller {
 			return 0;
 		}
 	}
+
+	/*
+	 * private double addDeadZone(double d) { //double magnitude = Math.abs(d);
+	 * 
+	 * if (d > DEAD_ZONE) { return (d - DEAD_ZONE); } else if (d < -DEAD_ZONE) {
+	 * return (d + DEAD_ZONE); } else { return 0; } }
+	 */
 
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.driveJoystick;
@@ -75,9 +82,8 @@ public class StrafeDriveController implements Controller {
 		// If trigger is pressed, use fine control
 		if (joystick.getTrigger())
 			driveVector = driveVector.times(CRAWL_FACTOR);
-		else if(joystick.getRawButton(2))
+		else if (joystick.getRawButton(2))
 			driveVector = driveVector.times(ZOOM_FACTOR);
-			
 
 		driveVector = smoother.smooth(driveVector);
 

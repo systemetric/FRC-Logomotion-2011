@@ -13,7 +13,7 @@ public class ArmTest extends IterativeRobot{
 	Arm arm;
 	
 	public void robotInit() {
-			arm = new Arm(6);
+			arm = new Arm(7);
 			armController = new ArmController(arm);
 	}
 	

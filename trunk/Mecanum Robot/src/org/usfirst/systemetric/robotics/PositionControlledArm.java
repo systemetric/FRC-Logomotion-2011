@@ -3,7 +3,6 @@ package org.usfirst.systemetric.robotics;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
 import edu.wpi.first.wpilibj.CANJaguar.PositionReference;
@@ -18,7 +17,7 @@ public class PositionControlledArm implements IMechanism {
 
 	volatile PegPosition       targetPosition      = null;
 	java.util.Timer            controlLoop         = new Timer();
-	
+
 	public CANJaguar           jag;
 	double                     positionOffset      = 0;
 
@@ -45,20 +44,23 @@ public class PositionControlledArm implements IMechanism {
 		}
 	}
 
-	public PositionControlledArm(int canId) throws CANTimeoutException {
-		jag = new CANJaguar(canId);
-		
-		jag.changeControlMode(ControlMode.kPosition);
-		jag.setPositionReference(PositionReference.kQuadEncoder);
-		jag.configEncoderCodesPerRev(6);
-		jag.setPID(100, 0.05, 0);
-		jag.configMaxOutputVoltage(12);
-		jag.enableControl();
-		
+	public PositionControlledArm(int canId){
+		try {
+	        jag = new CANJaguar(canId);
+			jag.changeControlMode(ControlMode.kPosition);
+			jag.setPositionReference(PositionReference.kQuadEncoder);
+			jag.configEncoderCodesPerRev(6);
+			jag.setPID(100, 0.05, 0);
+			jag.configMaxOutputVoltage(12);
+			jag.enableControl();
+        } catch (CANTimeoutException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }
+
 		controlLoop.schedule(new ArmTask(), 0, 20);
 
 	}
-
 
 	public void moveTo(PegPosition position) throws CANTimeoutException {
 		targetPosition = position;
@@ -96,10 +98,10 @@ public class PositionControlledArm implements IMechanism {
 		public void run() {
 			if (!DriverStation.getInstance().isEnabled())
 				return;
-			
+
 			try {
 				handleLimits();
-				
+
 				if (targetPosition != null) {
 					double positionError = getHeight() - targetPosition.height;
 

@@ -20,20 +20,27 @@ public class GrabberController implements Controller {
 
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.armJoystick;
+		
 		if (!joystick.getRawButton(GRAB_TOGGLE_BUTTON)) {
 			toggled = false;
-		} else if (!toggled) {
+		}
+		
+		else if (!toggled) {
 			grabber.toggle();
 			toggled = true;
 		}
+		
 		SmartDashboard.log(grabber.isClosed() ? "Closed" : "Open", "Grabber state");
 
-		if (!joystick.getRawButton(TILT_TOGGLE_BUTTON))
+		if (!joystick.getRawButton(TILT_TOGGLE_BUTTON)) {
 			tiltToggled = false;
+		}
+		
 		else if (!tiltToggled) {
 			grabber.toggleTilt();
 			tiltToggled = true;
 		}
+		
 		SmartDashboard.log(grabber.isUp() ? "Up" : "Down", "Tilt state");
 	}
 }
