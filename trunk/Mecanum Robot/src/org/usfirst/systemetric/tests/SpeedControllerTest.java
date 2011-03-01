@@ -1,12 +1,22 @@
 package org.usfirst.systemetric.tests;
 
+import org.usfirst.systemetric.util.JaguarFactory;
+
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
-import edu.wpi.first.wpilibj.CANJaguar.SpeedReference;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
+/**
+ * Allows simple backwards and forwards movement of the robot to test the speed
+ * controllers are working. Useful for tuning the PID constants in {@link JaguarFactory}
+ * 
+ * @author Eric
+ * 
+ * @see CANJaguarTest
+ * 
+ */
 public class SpeedControllerTest extends IterativeRobot {
 	Joystick joy = new Joystick(1);
 
@@ -21,20 +31,11 @@ public class SpeedControllerTest extends IterativeRobot {
 
 	private CANJaguar makeJag(int pin) {
 		try {
-			CANJaguar jag = new CANJaguar(pin, ControlMode.kSpeed);
-			jag.setSpeedReference(SpeedReference.kQuadEncoder);
-			jag.configEncoderCodesPerRev(360);
-			jag.setPID(-0.4, -0.01, 0);
-			jag.configMaxOutputVoltage(12);
-			jag.enableControl();
-			return jag;
+			return JaguarFactory.createJaguar(pin, ControlMode.kSpeed);
 		} catch (CANTimeoutException e) {
 			System.out.println("Jag no " + pin + " did not connect");
 			return null;
 		}
-	}
-
-	public void teleopInit() {
 	}
 
 	public double getSpeed() {

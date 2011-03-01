@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
  * A program to test which jaguars are connected. Make sure to change the manifest file!
  * 
  * @author Eric
- *
+ * 
+ * @see SpeedControllerTest
  */
 public class CANJaguarTest extends IterativeRobot {
 	/** The ID of the {@link CANJaguar} with the smallest ID*/
