@@ -1,19 +1,17 @@
-package org.usfirst.systemetric;
+package org.usfirst.systemetric.junk;
 
-import org.usfirst.systemetric.controllers.*;
+import org.usfirst.systemetric.OperatorConsole;
+import org.usfirst.systemetric.controllers.Controller;
+import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.robotics.DualMotorArm;
 import org.usfirst.systemetric.robotics.Grabber;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
-
 import org.usfirst.systemetric.sensors.ADXL345_I2C;
-import org.usfirst.systemetric.sensors.ADXL345_I2C.AllAxes;
-import org.usfirst.systemetric.sensors.ADXL345_I2C.Axes;
 import org.usfirst.systemetric.sensors.Gyro;
 import org.usfirst.systemetric.util.AccelerometerAccumulator;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.DriverStationLCD;
@@ -21,9 +19,6 @@ import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.HiTechnicCompass;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SmartDashboard;
-import edu.wpi.first.wpilibj.SmartDashboardPacketFactory;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class CopyOfRobotTest extends IterativeRobot {

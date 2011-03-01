@@ -4,9 +4,7 @@ import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.controllers.ArmController;
 import org.usfirst.systemetric.robotics.Arm;
 
-import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class ArmTest extends IterativeRobot{
 	ArmController armController;

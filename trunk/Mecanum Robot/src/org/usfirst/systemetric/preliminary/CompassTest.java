@@ -1,7 +1,6 @@
 package org.usfirst.systemetric.preliminary;
 
 import org.usfirst.systemetric.OperatorConsole;
-import org.usfirst.systemetric.sensors.HiTechnicCompass;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 

@@ -3,11 +3,8 @@ package org.usfirst.systemetric.robotics;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.usfirst.systemetric.robotics.Arm.PegPosition;
-
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
-import edu.wpi.first.wpilibj.CANJaguar.PositionReference;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.parsing.IMechanism;

@@ -1,13 +1,10 @@
-package org.usfirst.systemetric.tests;
-
-import org.usfirst.systemetric.OperatorConsole;
+package org.usfirst.systemetric;
 
 import org.usfirst.systemetric.controllers.ArmController;
 import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.controllers.MinibotController;
 import org.usfirst.systemetric.controllers.StrafeDriveController;
 import org.usfirst.systemetric.robotics.Arm;
-import org.usfirst.systemetric.robotics.BaseRobot;
 import org.usfirst.systemetric.robotics.Grabber;
 import org.usfirst.systemetric.robotics.Minibot;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
@@ -25,9 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  */
 
-public class DrivableRobotTest extends IterativeRobot {
-	BaseRobot r = BaseRobot.getInstance();
-	
+public class Main extends IterativeRobot {
 	//create some sensible names for the various channels
 	private static final int GRABBER_GRAB_SOLENOID_CHANNEL = 1;
 	private static int GRABBER_TILT_SOLENOID_CHANNEL = 3;
@@ -51,6 +46,8 @@ public class DrivableRobotTest extends IterativeRobot {
 
 	Arm a = new Arm(ARM_CAN_ID);
 	ArmController ac = new ArmController(a);
+	//PositionControlledArm a = new PositionControlledArm(ARM_CAN_ID);
+	//PositionArmController ac = new PositionArmController(a);
 	
 	Minibot minibot = new Minibot(MINIBOT_DEPLOYMENT_SOLENOID_CHANNEL);
 	MinibotController minibotController = new MinibotController(minibot); // minibot Controller

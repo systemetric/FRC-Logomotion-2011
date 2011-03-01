@@ -2,15 +2,13 @@ package org.usfirst.systemetric.tests;
 
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.controllers.StrafeDriveController;
-import org.usfirst.systemetric.geometry.*;
+import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
-import org.usfirst.systemetric.sensors.HiTechnicCompass;
-import org.usfirst.systemetric.util.JaguarFactory;
 import org.usfirst.systemetric.util.OrthogonalMecanumDriveFactory;
 
-import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * Basic drive code for testing whether the Mecanum code works in real life.

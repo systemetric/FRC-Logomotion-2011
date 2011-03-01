@@ -6,7 +6,6 @@ import org.usfirst.systemetric.robotics.Minibot;
 
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.SmartDashboard;
 
 /**
  * Class to control the minibot deployment

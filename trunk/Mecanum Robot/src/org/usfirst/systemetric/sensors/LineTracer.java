@@ -2,9 +2,7 @@ package org.usfirst.systemetric.sensors;
 
 import com.sun.squawk.util.Arrays;
 import com.sun.squawk.util.Comparer;
-import com.sun.squawk.util.MathUtils;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.parsing.ISensor;
 
@@ -46,6 +44,7 @@ public class LineTracer implements PIDSource, ISensor {
 
 	public LineTracer(Detector[] detectors) {
 		this.detectors = detectors;
+		//Sort the detectors from right to left, to simplify future algorithms.
 		Arrays.sort(detectors, new Comparer() {
 			public int compare(Object a, Object b) {
 				Detector da = (Detector) a;

@@ -5,11 +5,14 @@ import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.Grabber;
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.DriverStationLCD.Line;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;
-import edu.wpi.first.wpilibj.DriverStationLCD.Line;
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import edu.wpi.first.wpilibj.SimpleRobot;
 
 /**
  * Tests the relay with the joystick. If moved more than halfway, relay is

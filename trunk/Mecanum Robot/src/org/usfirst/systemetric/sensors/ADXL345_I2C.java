@@ -8,7 +8,9 @@ package org.usfirst.systemetric.sensors;
 
 import org.usfirst.systemetric.geometry.Vector;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DigitalModule;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SensorBase;
 
 /**
  * 

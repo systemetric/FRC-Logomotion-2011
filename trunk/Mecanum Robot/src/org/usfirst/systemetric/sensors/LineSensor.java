@@ -1,7 +1,6 @@
 package org.usfirst.systemetric.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.parsing.ISensor;
 
 public class LineSensor extends DigitalInput implements ISensor {

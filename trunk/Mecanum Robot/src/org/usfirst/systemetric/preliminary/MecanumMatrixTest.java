@@ -1,10 +1,8 @@
 package org.usfirst.systemetric.preliminary;
 
-import org.usfirst.systemetric.geometry.Matrix;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive.Wheel;
-import org.usfirst.systemetric.sensors.LineTracer.Detector;
 
 import com.sun.squawk.util.Comparer;
 
@@ -85,7 +83,7 @@ public class MecanumMatrixTest {
 		wheels[3] = new Wheel(new Vector(-10, 10), new Vector(0, 10),
 		    new Vector(-1, 1), new TestJaguar(" FrontLeft"));
 
-		MecanumDrive d2 = new MecanumDrive(wheels);
+        MecanumDrive d2 = new MecanumDrive(wheels);
 
 		System.out.println("-----------------");
 	}

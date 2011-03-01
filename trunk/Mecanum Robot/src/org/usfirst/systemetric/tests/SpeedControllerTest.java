@@ -2,11 +2,9 @@ package org.usfirst.systemetric.tests;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
-import edu.wpi.first.wpilibj.CANJaguar.PositionReference;
 import edu.wpi.first.wpilibj.CANJaguar.SpeedReference;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class SpeedControllerTest extends IterativeRobot {
