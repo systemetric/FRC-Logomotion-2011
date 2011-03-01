@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.parsing.ISensor;
  */
 public class LineTracer implements PIDSource, ISensor {
 	public static class Detector {
-		double       position;
-		DigitalInput sensor;
+		double     position;
+		LineSensor sensor;
 
-		public Detector(double position, DigitalInput sensor) {
+		public Detector(double position, LineSensor sensor) {
 			this.position = position;
 			this.sensor = sensor;
 		}
@@ -40,6 +40,7 @@ public class LineTracer implements PIDSource, ISensor {
 	}
 
 	Detector[]     detectors;
+	boolean        enabled = true;
 
 	LinePreference linePreference;
 
@@ -61,24 +62,25 @@ public class LineTracer implements PIDSource, ISensor {
 	 * @param sensors
 	 *            The line sensors
 	 */
-	public LineTracer(DigitalInput[] sensors) {
+	public LineTracer(LineSensor[] sensors) {
 		this(sensors, 2);
 	}
-	
+
 	/**
-	 * Create a LineTracer object from a set of evenly spaced sensors spanning a specified width
+	 * Create a LineTracer object from a set of evenly spaced sensors spanning a
+	 * specified width
 	 * 
 	 * @param sensors
 	 *            The line sensors
 	 * @param width
 	 *            The distance between the two outermost sensors
 	 */
-	public LineTracer(DigitalInput[] sensors, double width) {
+	public LineTracer(LineSensor[] sensors, double width) {
 		int numSensors = sensors.length;
 		detectors = new Detector[numSensors];
 
 		for (int i = 0; i < sensors.length; i++) {
-			detectors[i] = new Detector(width * i / (numSensors - 1) - width/2, sensors[i]);
+			detectors[i] = new Detector(width * i / (numSensors - 1) - width / 2, sensors[i]);
 		}
 	}
 
@@ -89,34 +91,34 @@ public class LineTracer implements PIDSource, ISensor {
 	public double getLine() {
 		double total = 0;
 		int count = 0;
-		if(linePreference == LinePreference.LEFT) {
-    		for (int i = 0; i < detectors.length; i++) {
-    			Detector d = detectors[i];
-    			if (d.sensor.get()) {
-    				count++;
-    				total += d.position;
-    			} else if(count > 0) {
-    				break;
-    			}
-    		}
-		} else if(linePreference == LinePreference.RIGHT) {
-    		for (int i = detectors.length - 1; i > 0 ; i--) {
-    			Detector d = detectors[i];
-    			if (d.sensor.get()) {
-    				count++;
-    				total += d.position;
-    			} else if(count > 0) {
-    				break;
-    			}
-    		}
+		if (linePreference == LinePreference.LEFT) {
+			for (int i = 0; i < detectors.length; i++) {
+				Detector d = detectors[i];
+				if (d.sensor.get()) {
+					count++;
+					total += d.position;
+				} else if (count > 0) {
+					break;
+				}
+			}
+		} else if (linePreference == LinePreference.RIGHT) {
+			for (int i = detectors.length - 1; i > 0; i--) {
+				Detector d = detectors[i];
+				if (d.sensor.get()) {
+					count++;
+					total += d.position;
+				} else if (count > 0) {
+					break;
+				}
+			}
 		} else {
 			for (int i = 0; i < detectors.length; i++) {
-    			Detector d = detectors[i];
-    			if (d.sensor.get()) {
-    				count++;
-    				total += d.position;
-    			}
-    		}
+				Detector d = detectors[i];
+				if (d.sensor.get()) {
+					count++;
+					total += d.position;
+				}
+			}
 		}
 		return total / count;
 	}
@@ -136,5 +138,25 @@ public class LineTracer implements PIDSource, ISensor {
 
 	public double pidGet() {
 		return getLine();
+	}
+
+	public void enable() {
+		for (int i = 0; i < detectors.length; i++) {
+			LineSensor s = detectors[i].sensor;
+
+			if (s instanceof LineSensor12V)
+				((LineSensor12V) s).enable();
+		}
+		enabled = true;
+	}
+
+	public void disable() {
+		for (int i = 0; i < detectors.length; i++) {
+			LineSensor s = detectors[i].sensor;
+
+			if (s instanceof LineSensor12V)
+				((LineSensor12V) s).disable();
+		}
+		enabled = false;
 	}
 }
