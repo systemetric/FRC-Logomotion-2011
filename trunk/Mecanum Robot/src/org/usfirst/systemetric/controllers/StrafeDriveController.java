@@ -1,5 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
+import org.usfirst.systemetric.BaseRobot;
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
@@ -31,6 +32,10 @@ public class StrafeDriveController implements Controller {
 		this.drive = drive;
 		smoother = new VectorSmoother(SMOOTH_FACTOR);
 	}
+
+	public StrafeDriveController(BaseRobot robot) {
+	    this(robot.drive);
+    }
 
 	private Vector addDeadZone(Vector vector) {
 		double magnitude = vector.length();

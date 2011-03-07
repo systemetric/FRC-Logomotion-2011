@@ -1,5 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
+import org.usfirst.systemetric.BaseRobot;
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.robotics.Arm;
 import org.usfirst.systemetric.robotics.Arm.PegPosition;
@@ -7,11 +8,15 @@ import org.usfirst.systemetric.robotics.Arm.PegPosition;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
-public class ArmController {
+public class ArmController implements Controller {
 	Arm arm;
 
 	public ArmController(Arm arm) {
 		this.arm = arm;
+	}
+	
+	public ArmController(BaseRobot robot) {
+		this(robot.arm);
 	}
 
 	public void controlWith(OperatorConsole cb) {

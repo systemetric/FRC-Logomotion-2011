@@ -1,5 +1,7 @@
-package org.usfirst.systemetric.robotics;
+package org.usfirst.systemetric;
 
+import org.usfirst.systemetric.robotics.Arm;
+import org.usfirst.systemetric.robotics.Grabber;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.sensors.LineSensor;
 import org.usfirst.systemetric.sensors.LineSensor12V;

@@ -1,5 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
+import org.usfirst.systemetric.BaseRobot;
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.robotics.Grabber;
 
@@ -17,6 +18,10 @@ public class GrabberController implements Controller {
 	public GrabberController(Grabber grabber) {
 		this.grabber = grabber;
 	}
+
+	public GrabberController(BaseRobot robot) {
+	   this(robot.grabber);
+    }
 
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.armJoystick;
