@@ -2,7 +2,7 @@ package org.usfirst.systemetric.controllers;
 
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.controllers.DriverStationIO.DigitalInput;
-import org.usfirst.systemetric.robotics.Minibot;
+import org.usfirst.systemetric.robotics.MinibotDeployer;
 
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -18,10 +18,10 @@ public class MinibotController implements Controller {
 
 	// TODO correct this value!!!
 	static final double LENGTH_OF_ROUND_IN_SECONDS = 120;
-	Minibot             minibot;
+	MinibotDeployer             minibot;
 	double              timePassed                 = 0;
 
-	public MinibotController(Minibot minibot) {
+	public MinibotController(MinibotDeployer minibot) {
 		this.minibot = minibot;
 	}
 

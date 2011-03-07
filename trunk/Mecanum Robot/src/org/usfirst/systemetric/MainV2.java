@@ -5,7 +5,7 @@ import org.usfirst.systemetric.controllers.Controller;
 import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.controllers.MinibotController;
 import org.usfirst.systemetric.controllers.StrafeDriveController;
-import org.usfirst.systemetric.robotics.Minibot;
+import org.usfirst.systemetric.robotics.MinibotDeployer;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
@@ -26,11 +26,12 @@ public class MainV2 extends IterativeRobot {
 		                                       new StrafeDriveController(robot)
 	                                       };
 
-	Minibot            minibot           = new Minibot(2);
+	MinibotDeployer            minibot           = new MinibotDeployer(2);
 	MinibotController  minibotController = new MinibotController(minibot);
 
 	public void teleopInit() {
 		robot.compressor.start();
+		robot.roundTimer.start();
 		// time.start();
 		// added
 		// testCompass = new HiTechnicCompass(4);
@@ -54,7 +55,7 @@ public class MainV2 extends IterativeRobot {
 	}
 	
 	public void disabledInit() {
-			minibot.bringDeploymentUp();
+			minibot.retract();
 	}
 	
 }

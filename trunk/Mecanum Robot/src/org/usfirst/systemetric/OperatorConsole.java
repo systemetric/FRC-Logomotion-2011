@@ -19,18 +19,18 @@ public class OperatorConsole {
 	public GenericHID      driveJoystick = new Joystick(1);
 	public GenericHID      armJoystick   = new Joystick(2);
 
-	public DigitalInput   minibotDeploy = new DigitalInput(2);
+	public DigitalInput    minibotDeploy = new DigitalInput(2);
 
-	/*//some random tests for LEDs
-	 * public DigitalOutput[] minibotLEDs = new DigitalOutput [] { new
-	 * DigitalOutput(3), new DigitalOutput(5), new DigitalOutput(7), new
-	 * DigitalOutput(5)} }
+	/*
+	 * //some random tests for LEDs public DigitalOutput[] minibotLEDs = new
+	 * DigitalOutput [] { new DigitalOutput(3), new DigitalOutput(5), new
+	 * DigitalOutput(7), new DigitalOutput(5)} }
 	 */
 
 	public DigitalOutput   grabberLED    = new DigitalOutput(9);
-	public DigitalOutput   grabberLED2    = new DigitalOutput(8);
-	public DigitalOutput   grabberLED3    = new DigitalOutput(7);
-	public DigitalOutput   grabberLED4    = new DigitalOutput(6);
+	public DigitalOutput   grabberLED2   = new DigitalOutput(8);
+	public DigitalOutput   grabberLED3   = new DigitalOutput(7);
+	public DigitalOutput   grabberLED4   = new DigitalOutput(6);
 
 	public Timer           teleopTimer;
 	public java.util.Timer t2;

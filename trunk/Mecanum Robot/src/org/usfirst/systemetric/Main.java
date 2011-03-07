@@ -6,7 +6,7 @@ import org.usfirst.systemetric.controllers.MinibotController;
 import org.usfirst.systemetric.controllers.StrafeDriveController;
 import org.usfirst.systemetric.robotics.Arm;
 import org.usfirst.systemetric.robotics.Grabber;
-import org.usfirst.systemetric.robotics.Minibot;
+import org.usfirst.systemetric.robotics.MinibotDeployer;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.util.OrthogonalMecanumDriveFactory;
 
@@ -49,7 +49,7 @@ public class Main extends IterativeRobot {
 	//PositionControlledArm a = new PositionControlledArm(ARM_CAN_ID);
 	//PositionArmController ac = new PositionArmController(a);
 	
-	Minibot minibot = new Minibot(MINIBOT_DEPLOYMENT_SOLENOID_CHANNEL);
+	MinibotDeployer minibot = new MinibotDeployer(MINIBOT_DEPLOYMENT_SOLENOID_CHANNEL);
 	MinibotController minibotController = new MinibotController(minibot); // minibot Controller
 	
 	//added:
@@ -64,7 +64,7 @@ public class Main extends IterativeRobot {
 	
 	public void disabledContinuous(){
 		if (!deploymentIsUp) {
-			minibot.bringDeploymentUp();
+			minibot.retract();
 		}
 	}
 	

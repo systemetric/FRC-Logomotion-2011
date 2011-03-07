@@ -9,21 +9,21 @@ import edu.wpi.first.wpilibj.parsing.IMechanism;
  * @author Louis
  * 
  */
-public class Minibot implements IMechanism {
+public class MinibotDeployer implements IMechanism {
 	Solenoid deploySolenoid;
 	double   timePassed = 0;
 
 	/**
-	 * @param tiltChannel
-	 *            The channel the solenoid controlling the downwards movement is
-	 *            attached to (probably in slot 2)
+	 * @param deployChannel
+	 *            The channel of the solenoid controlling the downwards movement
+	 *            of the deployment
 	 */
-	public Minibot(int deployChannel) {
+	public MinibotDeployer(int deployChannel) {
 		deploySolenoid = new Solenoid(deployChannel);
-		deploySolenoid.set(false);
+		retract();
 	}
-	
-	public void bringDeploymentUp (){
+
+	public void retract() {
 		deploySolenoid.set(false);
 	}
 
@@ -34,7 +34,7 @@ public class Minibot implements IMechanism {
 		deploySolenoid.set(true);
 	}
 
-	public boolean isDown() {
+	public boolean isDeployed() {
 		/**
 		 * returns the state of the minibot deployment mechanism
 		 */

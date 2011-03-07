@@ -9,6 +9,7 @@ import org.usfirst.systemetric.sensors.LineTracer;
 import org.usfirst.systemetric.util.OrthogonalMecanumDriveFactory;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
 
 /**
@@ -25,6 +26,8 @@ public class BaseRobot implements IMechanism {
 	public Compressor        compressor;
 
 	public LineTracer        lineSensor;
+	
+	public Timer             roundTimer;
 
 	private BaseRobot() {
 		// Create the driving robot
