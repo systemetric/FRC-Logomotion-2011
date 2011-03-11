@@ -13,6 +13,10 @@ import edu.wpi.first.wpilibj.parsing.IMechanism;
 public class Grabber implements IMechanism {
 	Solenoid tiltSolenoid;
 	Solenoid grabSolenoid;
+	
+	//State of the solenoids when grabbed and tilted up
+	private final boolean TILTED_UP_STATE = false;
+	private final boolean GRABBED_STATE = true;
 
 	/**
 	 * @param tiltChannel
@@ -26,27 +30,27 @@ public class Grabber implements IMechanism {
 	}
 
 	public void grab() {
-		if (!isClosed())
-			grabSolenoid.set(true);
+		if (!isGrabbed())
+			grabSolenoid.set(GRABBED_STATE);
 	}
 
 	public void release() {
-		if (isClosed())
-			grabSolenoid.set(false);
+		if (isGrabbed())
+			grabSolenoid.set(!GRABBED_STATE);
 	}
 
 	public void tiltUp() {
 		if (!isUp())
-			tiltSolenoid.set(true);
+			tiltSolenoid.set(TILTED_UP_STATE);
 	}
 
 	public void tiltDown() {
 		if (isUp())
-			tiltSolenoid.set(false);
+			tiltSolenoid.set(!TILTED_UP_STATE);
 	}
 
 	public void toggle() {
-		if (isClosed())
+		if (isGrabbed())
 			release();
 		else
 			grab();
@@ -60,10 +64,10 @@ public class Grabber implements IMechanism {
 	}
 
 	public boolean isUp() {
-		return tiltSolenoid.get();
+		return tiltSolenoid.get() == TILTED_UP_STATE;
 	}
 
-	public boolean isClosed() {
-		return grabSolenoid.get();
+	public boolean isGrabbed() {
+		return grabSolenoid.get() == GRABBED_STATE;
 	}
 }
