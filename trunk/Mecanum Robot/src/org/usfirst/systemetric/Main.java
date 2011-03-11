@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  */
 
-public class mainRobot extends IterativeRobot {
+public class Main extends IterativeRobot {
 	//create some sensible names for the various channels
 	private static final int GRABBER_GRAB_SOLENOID_CHANNEL = 1;
 	private static int GRABBER_TILT_SOLENOID_CHANNEL = 3;
