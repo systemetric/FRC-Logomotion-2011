@@ -25,12 +25,12 @@ public class Grabber implements IMechanism {
 		grabSolenoid = new Solenoid(grabChannel);
 	}
 
-	public void close() {
+	public void grab() {
 		if (!isClosed())
 			grabSolenoid.set(true);
 	}
 
-	public void open() {
+	public void release() {
 		if (isClosed())
 			grabSolenoid.set(false);
 	}
@@ -47,9 +47,9 @@ public class Grabber implements IMechanism {
 
 	public void toggle() {
 		if (isClosed())
-			open();
+			release();
 		else
-			close();
+			grab();
 	}
 
 	public void toggleTilt() {

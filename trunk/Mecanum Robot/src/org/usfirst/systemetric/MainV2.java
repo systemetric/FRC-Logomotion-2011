@@ -26,7 +26,7 @@ public class MainV2 extends IterativeRobot {
 		                                       new StrafeDriveController(robot)
 	                                       };
 
-	MinibotDeployer            minibot           = new MinibotDeployer(3);
+	MinibotDeployer    minibot           = new MinibotDeployer(3);
 	MinibotController  minibotController = new MinibotController(minibot);
 
 	public void teleopInit() {

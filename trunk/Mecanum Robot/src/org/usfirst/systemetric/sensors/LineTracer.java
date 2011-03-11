@@ -44,7 +44,7 @@ public class LineTracer implements PIDSource, ISensor {
 
 	public LineTracer(Detector[] detectors) {
 		this.detectors = detectors;
-		//Sort the detectors from right to left, to simplify future algorithms.
+		// Sort the detectors from right to left, to simplify future algorithms.
 		Arrays.sort(detectors, new Comparer() {
 			public int compare(Object a, Object b) {
 				Detector da = (Detector) a;
@@ -57,7 +57,7 @@ public class LineTracer implements PIDSource, ISensor {
 	public void setLinePreference(LinePreference preference) {
 		linePreference = preference;
 	}
-	
+
 	/**
 	 * Create a LineTracer object from a set of evenly spaced sensors, which
 	 * detect a line between 1 and -1
@@ -139,6 +139,14 @@ public class LineTracer implements PIDSource, ISensor {
 		return count;
 	}
 
+	public boolean isAtT() {
+		for (int i = 0; i < detectors.length; i++)
+			if (!detectors[i].sensor.get())
+				return false;
+
+		return true;
+	}
+
 	public double pidGet() {
 		return getLine();
 	}
@@ -162,12 +170,12 @@ public class LineTracer implements PIDSource, ISensor {
 		}
 		enabled = false;
 	}
-	
+
 	public String getState() {
 		StringBuffer state = new StringBuffer("(");
 		for (int i = 0; i < detectors.length - 1; i++) {
-	        state.append(detectors[i].sensor.get()).append(", ");
-        }
+			state.append(detectors[i].sensor.get()).append(", ");
+		}
 		state.append(detectors[detectors.length - 1].sensor.get()).append(")");
 		return state.toString();
 	}
