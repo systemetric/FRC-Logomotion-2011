@@ -54,6 +54,10 @@ public class LineTracer implements PIDSource, ISensor {
 		});
 	}
 
+	public void setLinePreference(LinePreference preference) {
+		linePreference = preference;
+	}
+	
 	/**
 	 * Create a LineTracer object from a set of evenly spaced sensors, which
 	 * detect a line between 1 and -1

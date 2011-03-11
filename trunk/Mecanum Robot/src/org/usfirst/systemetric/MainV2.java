@@ -26,12 +26,12 @@ public class MainV2 extends IterativeRobot {
 		                                       new StrafeDriveController(robot)
 	                                       };
 
-	MinibotDeployer            minibot           = new MinibotDeployer(2);
+	MinibotDeployer            minibot           = new MinibotDeployer(3);
 	MinibotController  minibotController = new MinibotController(minibot);
 
 	public void teleopInit() {
 		robot.compressor.start();
-		robot.roundTimer.start();
+		//robot.roundTimer.start();
 		// time.start();
 		// added
 		// testCompass = new HiTechnicCompass(4);

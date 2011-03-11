@@ -57,6 +57,7 @@ public class Main extends IterativeRobot {
 	
 	public void teleopInit() {
 	    c.start();
+	    //BaseRobot.getInstance();
 	    //time.start();
 	    //added
 	    //testCompass = new HiTechnicCompass(4);

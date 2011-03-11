@@ -6,6 +6,7 @@ import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.sensors.LineSensor;
 import org.usfirst.systemetric.sensors.LineSensor12V;
 import org.usfirst.systemetric.sensors.LineTracer;
+import org.usfirst.systemetric.sensors.LineTracer.LinePreference;
 import org.usfirst.systemetric.util.OrthogonalMecanumDriveFactory;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -37,18 +38,18 @@ public class BaseRobot implements IMechanism {
 		compressor = new Compressor(1, 1);
 
 		// Create the arm
-		arm = new Arm(6);
+		arm = new Arm(7);
 
 		// Create the grabber
-		grabber = new Grabber(2, 1);
+		grabber = new Grabber(3, 1);
 
 		// Create the line sensor
 		lineSensor = new LineTracer(new LineSensor[] {
-		    new LineSensor12V(9, 8),
+		    new LineSensor12V(8, 4),
 		    new LineSensor12V(14, 7),
 		    new LineSensor12V(12, 6),
 		    new LineSensor12V(10, 5),
-		    new LineSensor12V(8, 4)
+		    new LineSensor12V(9, 8)
 		}, 0.2);
 	}
 
