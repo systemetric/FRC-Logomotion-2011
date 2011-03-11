@@ -25,7 +25,7 @@ public class ArmController implements Controller {
 		if (true || joystick.getTrigger()) { //this is the original code
 		//if (joystick.getTrigger()) {
 			try {
-				arm.setSpeed(-joystick.getY());
+				arm.setSpeed(joystick.getY());
 			} catch (CANTimeoutException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
