@@ -16,6 +16,7 @@ public class LineSensor12V extends LineSensor {
 	}
 	public LineSensor12V(int dataChannel, Solenoid powerSupply, boolean invert) {
 		super(dataChannel, invert);
+		this.powerSupply = powerSupply;
 		enable();
 	}
 	
