@@ -158,4 +158,13 @@ public class LineTracer implements PIDSource, ISensor {
 		}
 		enabled = false;
 	}
+	
+	public String getState() {
+		StringBuffer state = new StringBuffer("(");
+		for (int i = 0; i < detectors.length - 1; i++) {
+	        state.append(detectors[i].sensor.get()).append(", ");
+        }
+		state.append(detectors[detectors.length - 1].sensor.get()).append(")");
+		return state.toString();
+	}
 }

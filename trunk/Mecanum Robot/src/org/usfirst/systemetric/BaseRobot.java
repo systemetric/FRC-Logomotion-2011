@@ -44,14 +44,12 @@ public class BaseRobot implements IMechanism {
 
 		// Create the line sensor
 		lineSensor = new LineTracer(new LineSensor[] {
-			new LineSensor12V(15, 8),
+		    new LineSensor12V(9, 8),
 		    new LineSensor12V(14, 7),
-		    new LineSensor12V(13, 8),
 		    new LineSensor12V(12, 6),
-		    new LineSensor12V(11, 4),
 		    new LineSensor12V(10, 5),
-		    new LineSensor12V(9, 4)
-		}, 35);
+		    new LineSensor12V(8, 4)
+		}, 0.2);
 	}
 
 	/**
