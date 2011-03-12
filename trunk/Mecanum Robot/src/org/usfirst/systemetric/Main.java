@@ -7,6 +7,7 @@ import org.usfirst.systemetric.controllers.StrafeDriveController;
 import org.usfirst.systemetric.robotics.Arm;
 import org.usfirst.systemetric.robotics.Grabber;
 import org.usfirst.systemetric.robotics.MinibotDeployer;
+import org.usfirst.systemetric.robotics.PositionControlledArm;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.util.OrthogonalMecanumDriveFactory;
 
@@ -44,10 +45,10 @@ public class Main extends IterativeRobot {
 	MecanumDrive m = OrthogonalMecanumDriveFactory.DEFAULT_ROBOT;
 	StrafeDriveController mc = new StrafeDriveController(m);
 
-	Arm a = new Arm(ARM_CAN_ID);
-	ArmController ac = new ArmController(a);
-	//PositionControlledArm a = new PositionControlledArm(ARM_CAN_ID);
-	//PositionArmController ac = new PositionArmController(a);
+	//Arm a = new Arm(ARM_CAN_ID);
+	//ArmController ac = new ArmController(a);
+	PositionControlledArm a = new PositionControlledArm(ARM_CAN_ID);
+	PositionArmController ac = new PositionArmController(a);
 	
 	MinibotDeployer minibot = new MinibotDeployer(MINIBOT_DEPLOYMENT_SOLENOID_CHANNEL);
 	MinibotController minibotController = new MinibotController(minibot); // minibot Controller

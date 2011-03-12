@@ -1,5 +1,6 @@
 package org.usfirst.systemetric.controllers;
 
+
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.robotics.PositionControlledArm;
 import org.usfirst.systemetric.robotics.PositionControlledArm.PegPosition;
@@ -28,22 +29,20 @@ public class PositionArmController {
 		PegPosition target = arm.getTarget();
 
 		//Go to a specified height if a button is pressed
-		if (joystick.getRawButton(9)) {
+		if (joystick.getRawButton(9))
 			target = PegPosition.BOTTOM;
-		} else if (joystick.getRawButton(8)) {
+		else if (joystick.getRawButton(8))
 			target = PegPosition.BOTTOM_OFFSET;
-		} else if (joystick.getRawButton(7)) {
+		else if (joystick.getRawButton(7))
 			target = PegPosition.MIDDLE;
-		} else if (joystick.getRawButton(6)) {
+		else if (joystick.getRawButton(6))
 			target = PegPosition.MIDDLE_OFFSET;
-		} else if (joystick.getRawButton(10)) {
+		else if (joystick.getRawButton(10))
 			target = PegPosition.RESET;
-		} else if(target == null)
-			target = PegPosition.BOTTOM;
 		
 		//Manually adjust the height by using the joystick
 		double speed = deadZone.applyTo(joystick.getY());
-		target = PegPosition.custom(target.height + speed * dt);
+		if(target != null) target = PegPosition.custom(target.height + speed * dt);
 		
 		//Turn on the motor
 		try {
