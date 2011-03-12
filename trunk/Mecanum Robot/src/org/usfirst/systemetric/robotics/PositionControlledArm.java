@@ -17,7 +17,7 @@ public class PositionControlledArm implements IMechanism {
 
 	volatile PegPosition       targetPosition      = null;
 	java.util.Timer            controlLoop         = new Timer();
-
+	boolean                    doFeedback          = false;
 	public CANJaguar           jag;
 	double                     positionOffset      = 0;
 
@@ -131,12 +131,21 @@ public class PositionControlledArm implements IMechanism {
 		configPositionControl();
 
 		targetPosition = position;
+		doFeedback = true;
+	}
+	
+	public void reset() {
+		try {
+			moveTo(PegPosition.RESET);
+		} catch (CANTimeoutException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public double getHeight() throws CANTimeoutException {
 		return metresPerEncoderRev * (jag.getPosition() - positionOffset);
 	}
-	
+
 	public PegPosition getTarget() {
 		return targetPosition;
 	}
@@ -156,7 +165,7 @@ public class PositionControlledArm implements IMechanism {
 			if (!jag.getForwardLimitOK()) {
 				double actualPosition = PegPosition.TOP_LIMIT.encoderCount;
 				positionOffset = jagPosition - actualPosition;
-				
+
 				System.out.println("At top limit");
 			}
 
@@ -164,10 +173,10 @@ public class PositionControlledArm implements IMechanism {
 			if (!jag.getReverseLimitOK()) {
 				double actualPosition = PegPosition.BOTTOM_LIMIT.encoderCount;
 				positionOffset = jagPosition - actualPosition;
-				
-				if(targetPosition == PegPosition.RESET)
+
+				if (targetPosition == PegPosition.RESET)
 					targetPosition = PegPosition.BOTTOM;
-				
+
 				System.out.println("At bottom limit");
 			}
 		}
@@ -179,13 +188,13 @@ public class PositionControlledArm implements IMechanism {
 			try {
 				handleLimits();
 
-				if (positionControlMode && targetPosition != null) {
+				if (positionControlMode && targetPosition != null && doFeedback) {
 					double positionError = getHeight() - targetPosition.height;
 
 					boolean inPosition = Math.abs(positionError) < heightTolerance;
 
 					if (inPosition) {
-						targetPosition = null;
+						doFeedback = false;
 						jag.configMaxOutputVoltage(0);
 					} else if (!inPosition) {
 						jag.configMaxOutputVoltage(12);
