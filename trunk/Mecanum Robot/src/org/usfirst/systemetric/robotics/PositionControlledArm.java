@@ -32,10 +32,10 @@ public class PositionControlledArm implements IMechanism {
 		public static final PegPosition RESET         = new PegPosition(-10.0);
 		public static final PegPosition BOTTOM_LIMIT  = new PegPosition(0.75);
 
-		public static final PegPosition BOTTOM        = new PegPosition(0.75);
-		public static final PegPosition BOTTOM_OFFSET = new PegPosition(0.95);
-		public static final PegPosition MIDDLE        = new PegPosition(1.65);
-		public static final PegPosition MIDDLE_OFFSET = new PegPosition(1.85);
+		public static final PegPosition BOTTOM        = new PegPosition(0.76);
+		public static final PegPosition BOTTOM_OFFSET = new PegPosition(0.97);
+		public static final PegPosition MIDDLE        = new PegPosition(1.69);
+		public static final PegPosition MIDDLE_OFFSET = new PegPosition(1.91);
 
 		public static final PegPosition TOP_LIMIT     = new PegPosition(2.00);
 
