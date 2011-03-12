@@ -14,11 +14,6 @@ public class ArmController implements Controller {
 	public ArmController(Arm arm) {
 		this.arm = arm;
 	}
-	
-	public ArmController(BaseRobot robot) {
-		this(robot.arm);
-	}
-
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.armJoystick;
 		PegPosition position = null;

@@ -1,6 +1,7 @@
 package org.usfirst.systemetric.controllers;
 
 
+import org.usfirst.systemetric.BaseRobot;
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.robotics.PositionControlledArm;
 import org.usfirst.systemetric.robotics.PositionControlledArm.PegPosition;
@@ -9,7 +10,9 @@ import org.usfirst.systemetric.util.DeadZone;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
-public class PositionArmController {
+public class PositionArmController implements Controller {
+	final double MANUAL_SPEED = 0.5;
+	
 	PositionControlledArm arm;
 	DeadZone              deadZone       = new DeadZone(0.05);
 	long                  lastUpdateTime = -1;
@@ -17,6 +20,10 @@ public class PositionArmController {
 	public PositionArmController(PositionControlledArm arm) {
 		this.arm = arm;
 	}
+
+	public PositionArmController(BaseRobot robot) {
+	    this(robot.arm);
+    }
 
 	public void controlWith(OperatorConsole cb) {
 		//Get time since last update
@@ -42,7 +49,8 @@ public class PositionArmController {
 		
 		//Manually adjust the height by using the joystick
 		double speed = deadZone.applyTo(joystick.getY());
-		if(target != null) target = PegPosition.custom(target.height + speed * dt);
+		if(target != null) target = PegPosition.custom(target.height + speed * dt * MANUAL_SPEED);
+		System.out.println("Target: " + target);
 		
 		//Turn on the motor
 		try {
