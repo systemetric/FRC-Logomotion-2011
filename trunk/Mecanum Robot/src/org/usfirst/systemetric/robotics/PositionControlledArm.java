@@ -29,6 +29,7 @@ public class PositionControlledArm implements IMechanism {
 		public final double             height;
 		public final double             encoderCount;
 
+		public static final PegPosition RESET         = new PegPosition(-10.0);
 		public static final PegPosition BOTTOM_LIMIT  = new PegPosition(0.75);
 
 		public static final PegPosition BOTTOM        = new PegPosition(0.75);
@@ -44,28 +45,30 @@ public class PositionControlledArm implements IMechanism {
 		}
 	}
 
-	public PositionControlledArm(int canId){
+	public PositionControlledArm(int canId) {
 		try {
-	        jag = new CANJaguar(canId);
+			jag = new CANJaguar(canId);
 			jag.changeControlMode(ControlMode.kPosition);
 			jag.setPositionReference(PositionReference.kQuadEncoder);
 			jag.configEncoderCodesPerRev(6);
 			jag.setPID(250, 0.05, 0);
 			jag.configMaxOutputVoltage(12);
 			jag.enableControl();
-			jag.setX(-10 / metresPerEncoderRev);
-        } catch (CANTimeoutException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        }
+			moveTo(PegPosition.RESET);
+		} catch (CANTimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		controlLoop.schedule(new ArmTask(), 0, 20);
 
 	}
 
 	public void moveTo(PegPosition position) throws CANTimeoutException {
-		if(position == null) return;
-		if(targetPosition != position) System.out.println("Set position to " + position.height);
+		if (position == null)
+			return;
+		if (targetPosition != position)
+			System.out.println("Set position to " + position.height);
 		targetPosition = position;
 	}
 
@@ -105,7 +108,6 @@ public class PositionControlledArm implements IMechanism {
 
 			try {
 				handleLimits();
-				
 
 				if (targetPosition != null) {
 					double positionError = getHeight() - targetPosition.height;
