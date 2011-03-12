@@ -78,8 +78,8 @@ public class StrafeDriveController implements Controller {
 		GenericHID joystick = cb.driveJoystick;
 
 		// Get information from joystick
-		Vector driveVector = new Vector(-joystick.getX(), joystick.getY());
-		double turnSpeed = -joystick.getTwist();
+		Vector driveVector = new Vector(-joystick.getX(), joystick.getY()).times(1.5);
+		double turnSpeed = -joystick.getTwist()*2;
 
 		driveVector = addDeadZone(driveVector);
 		turnSpeed = addDeadZone(turnSpeed);
