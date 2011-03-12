@@ -44,6 +44,7 @@ public class AutonomousMode {
 
 		//start following the line
 		robot.lineSensor.setLinePreference(LinePreference.LEFT);
+		controller.reset();
 		controller.enable();
 
 		//Wait for the grabber to grab
@@ -89,6 +90,7 @@ public class AutonomousMode {
 			return;
 	
 		controller.disable();
+		robot.drive.setDriveVelocity(Vector.ZERO);
 		robot.grabber.release();
 		// Arm goes down
 	}

@@ -34,15 +34,15 @@ public class MainV2 extends IterativeRobot {
 
 	public void autonomousInit() {
 		robot.compressor.start();
-		//auto.init();
+		auto.init();
 	}
 
 	public void autonomousContinuous() {
-		//auto.continuous();
+		auto.continuous();
 	}
 
 	public void teleopInit() {
-		//auto.disable();
+		auto.disable();
 		robot.compressor.start();
 	}
 
