@@ -123,6 +123,7 @@ public class LineTracer implements PIDSource, ISensor {
 				}
 			}
 		}
+		//if(count == 0) return 0;
 		return total / count;
 	}
 
