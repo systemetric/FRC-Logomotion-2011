@@ -55,6 +55,10 @@ public class Main extends IterativeRobot {
 	//added:
 	//HiTechnicCompass testCompass;
 	
+	public void autonomousInit() {
+	   c.start();
+	}
+	
 	public void teleopInit() {
 	    c.start();
 	    //BaseRobot.getInstance();
