@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class LineFollower extends IterativeRobot {
 	final double  FORWARD_SPEED   = -0.25;
+	final long    T_WAIT_TIME     = 500;
 
 	boolean       hasDeployedRing = false;
 
@@ -44,21 +45,38 @@ public class LineFollower extends IterativeRobot {
 		controller.enable();
 	}
 
-	int tCount = 0;
+	int  tCount    = 0;
+	long lastTtime = -T_WAIT_TIME;
 
 	public void autonomousContinuous() {
-		//Count the number of 'T's the sensors see
-		if (sensor.isAtT()) {
-			tCount++;
+		long currentTime = System.currentTimeMillis();
+		long timeSinceLastT = currentTime - lastTtime;
 		
-    		//Stop at the second one
-    		if (tCount == 2) {
-    			controller.disable();
-    
-    			// Arm goes up
-    			robot.grabber.release();
-    			// Arm goes down
-    		}
-		}
+		
+		//If we're not at a T, continue the loop
+		if(!sensor.isAtT())
+			return;
+		
+		lastTtime = currentTime;
+		
+		//If we're seeing the same T, continue the loop
+		if (timeSinceLastT < T_WAIT_TIME)
+			return;
+		
+		tCount++;
+		
+		//If this isn't the second T, continue the loop
+		if (tCount != 2) 
+			return;
+	
+		controller.disable();
+
+		// Arm goes up
+		robot.grabber.release();
+		// Arm goes down
+	}
+	
+	public void disabledInit() {
+	    controller.disable();
 	}
 }
