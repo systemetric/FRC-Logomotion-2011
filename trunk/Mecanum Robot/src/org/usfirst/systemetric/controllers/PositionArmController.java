@@ -26,7 +26,9 @@ public class PositionArmController {
 			position = PegPosition.MIDDLE;
 		} else if (joystick.getRawButton(6)) {
 			position = PegPosition.MIDDLE_OFFSET;
-		}		
+		} else if (joystick.getRawButton(10)) {
+			position = PegPosition.RESET;
+		}
 		try {
 			arm.moveTo(position);
 		} catch (CANTimeoutException e) {
