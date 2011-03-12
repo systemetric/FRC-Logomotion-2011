@@ -3,6 +3,7 @@ package org.usfirst.systemetric;
 import org.usfirst.systemetric.controllers.ArmController;
 import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.controllers.MinibotController;
+import org.usfirst.systemetric.controllers.PositionArmController;
 import org.usfirst.systemetric.controllers.StrafeDriveController;
 import org.usfirst.systemetric.robotics.Arm;
 import org.usfirst.systemetric.robotics.Grabber;
@@ -58,6 +59,11 @@ public class Main extends IterativeRobot {
 	
 	public void autonomousInit() {
 	   c.start();
+	   Timer.delay(3.5);
+	   g.tiltDown();
+	   Timer.delay(2);
+	   g.grab();
+	   Timer.delay(2.5);
 	}
 	
 	public void teleopInit() {
