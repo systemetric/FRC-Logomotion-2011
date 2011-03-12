@@ -2,6 +2,7 @@ package org.usfirst.systemetric.preliminary;
 
 import org.usfirst.systemetric.BaseRobot;
 import org.usfirst.systemetric.geometry.Vector;
+import org.usfirst.systemetric.robotics.PositionControlledArm.PegPosition;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
 import org.usfirst.systemetric.sensors.LineTracer;
 import org.usfirst.systemetric.sensors.LineTracer.LinePreference;
@@ -10,39 +11,51 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class LineFollower extends IterativeRobot {
-	final double  FORWARD_SPEED   = -0.25;
+	final double  FORWARD_SPEED   = -0.5;
 	final long    T_WAIT_TIME     = 500;
-
-	boolean       hasDeployedRing = false;
-
+	
+	final long    NUM_TS          = 1;
+	
 	BaseRobot     robot           = BaseRobot.getInstance();
-	MecanumDrive  drive           = robot.drive;
-	LineTracer    sensor          = robot.lineSensor;
 
-	PIDController controller      = new PIDController(10, 0, 0, sensor, new PIDOutput() {
+	PIDController controller      = new PIDController(10, 0, 0, robot.lineSensor, new PIDOutput() {
 		                              public void pidWrite(double output) {
-			                              drive.setDriveVelocity(new Vector(output, FORWARD_SPEED));
+		                            	  if(Double.isNaN(output))
+		                            		  System.out.println("Uh oh...");
+		                            	  robot.drive.setDriveVelocity(new Vector(output, FORWARD_SPEED));
 		                              }
 	                              });
 
 	public void autonomousInit() {
+        try {
+	        robot.arm.moveTo(PegPosition.RESET);
+        } catch (CANTimeoutException e1) {
+	        // TODO Auto-generated catch block
+	        e1.printStackTrace();
+        }
 		robot.compressor.start();
+		Timer.delay(3.5);
 		robot.grabber.tiltDown();
 
-		// Wait for air pressure
-		while (!robot.compressor.getPressureSwitchValue())
-			;
-
+		
+		Timer.delay(2);
 		robot.grabber.grab();
-		System.out.println("grab");
-		Timer.delay(0.2);
-		robot.grabber.tiltUp();
-		System.out.println("up");
 
-		sensor.setLinePreference(LinePreference.LEFT);
+		robot.lineSensor.setLinePreference(LinePreference.LEFT);
 		controller.enable();
+		
+		Timer.delay(2.5);
+		robot.grabber.tiltUp();
+		Timer.delay(2.5);
+		try {
+	        robot.arm.moveTo(PegPosition.MIDDLE_OFFSET);
+        } catch (CANTimeoutException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }
 	}
 
 	int  tCount    = 0;
@@ -54,8 +67,10 @@ public class LineFollower extends IterativeRobot {
 		
 		
 		//If we're not at a T, continue the loop
-		if(!sensor.isAtT())
+		if(!robot.lineSensor.isAtT())
 			return;
+		
+		System.out.println("At a T");
 		
 		lastTtime = currentTime;
 		
@@ -65,13 +80,11 @@ public class LineFollower extends IterativeRobot {
 		
 		tCount++;
 		
-		//If this isn't the second T, continue the loop
-		if (tCount != 2) 
+		//If this isn't the last T, continue the loop
+		if (tCount != NUM_TS) 
 			return;
 	
 		controller.disable();
-
-		// Arm goes up
 		robot.grabber.release();
 		// Arm goes down
 	}
