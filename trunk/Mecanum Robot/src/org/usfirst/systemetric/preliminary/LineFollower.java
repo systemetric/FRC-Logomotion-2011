@@ -28,15 +28,15 @@ public class LineFollower extends IterativeRobot {
 
 	public void autonomousInit() {
 		robot.compressor.start();
-		System.out.println("on");
-		Timer.delay(
-			2);
 		robot.grabber.tiltDown();
-		System.out.println("down");
-		Timer.delay(1);
+
+		// Wait for air pressure
+		while (!robot.compressor.getPressureSwitchValue())
+			;
+
 		robot.grabber.grab();
 		System.out.println("grab");
-		Timer.delay(1);
+		Timer.delay(0.2);
 		robot.grabber.tiltUp();
 		System.out.println("up");
 
@@ -44,15 +44,21 @@ public class LineFollower extends IterativeRobot {
 		controller.enable();
 	}
 
-	public void autonomousContinuous() {
-		if (!hasDeployedRing && sensor.isAtT()) {
-			controller.disable();
+	int tCount = 0;
 
-			hasDeployedRing = true;
-			
-			// Arm goes up
-			robot.grabber.release();
-			//Arm goes down
+	public void autonomousContinuous() {
+		//Count the number of 'T's the sensors see
+		if (sensor.isAtT()) {
+			tCount++;
+		
+    		//Stop at the second one
+    		if (tCount == 2) {
+    			controller.disable();
+    
+    			// Arm goes up
+    			robot.grabber.release();
+    			// Arm goes down
+    		}
 		}
 	}
 }
