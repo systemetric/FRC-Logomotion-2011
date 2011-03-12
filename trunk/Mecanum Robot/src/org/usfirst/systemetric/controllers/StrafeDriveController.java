@@ -4,6 +4,7 @@ import org.usfirst.systemetric.BaseRobot;
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.geometry.Vector;
 import org.usfirst.systemetric.robotics.navigation.MecanumDrive;
+import org.usfirst.systemetric.util.DeadZone;
 import org.usfirst.systemetric.util.VectorSmoother;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -18,7 +19,7 @@ public class StrafeDriveController implements Controller {
 	 * speed is set
 	 */
 
-	public static final double DEAD_ZONE     = 0.05;
+	public static final DeadZone deadZone     = new DeadZone(0.05);
 
 	/**
 	 * The higher this value the faster the acceleration. Between 1 and 0
@@ -37,36 +38,6 @@ public class StrafeDriveController implements Controller {
 	    this(robot.drive);
     }
 
-	private Vector addDeadZone(Vector vector) {
-		double magnitude = vector.length();
-
-		if (magnitude < DEAD_ZONE) {
-			return Vector.ZERO;
-		} else {
-			// The vector to subtract from the drive direction to account for
-			// the dead zone
-			Vector deadZoneOffset = vector.unit().times(DEAD_ZONE);
-
-			// Amount to multiply by to ensure that after subtraction, the
-			// vector can still hit the maximum of (1,1)
-			double multiplyFactor = magnitude / (1 - DEAD_ZONE);
-
-			return vector.minus(deadZoneOffset).times(multiplyFactor);
-		}
-	}
-
-	private double addDeadZone(double d) {
-		double magnitude = Math.abs(d);
-
-		if (d > DEAD_ZONE) {
-			return (d - DEAD_ZONE) / (1 - DEAD_ZONE);
-		} else if (d < -DEAD_ZONE) {
-			return (d + DEAD_ZONE) / (1 - DEAD_ZONE);
-		} else {
-			return 0;
-		}
-	}
-
 	/*
 	 * private double addDeadZone(double d) { //double magnitude = Math.abs(d);
 	 * 
@@ -81,8 +52,8 @@ public class StrafeDriveController implements Controller {
 		Vector driveVector = new Vector(-joystick.getX(), joystick.getY()).times(1.5);
 		double turnSpeed = -joystick.getTwist()*2;
 
-		driveVector = addDeadZone(driveVector);
-		turnSpeed = addDeadZone(turnSpeed);
+		driveVector = deadZone.applyTo(driveVector);
+		turnSpeed = deadZone.applyTo(turnSpeed);
 
 		// If trigger is pressed, use fine control
 		if (joystick.getTrigger())
