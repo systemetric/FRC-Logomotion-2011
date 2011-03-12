@@ -4,6 +4,7 @@ import org.usfirst.systemetric.controllers.ArmController;
 import org.usfirst.systemetric.controllers.Controller;
 import org.usfirst.systemetric.controllers.GrabberController;
 import org.usfirst.systemetric.controllers.MinibotController;
+import org.usfirst.systemetric.controllers.PositionArmController;
 import org.usfirst.systemetric.controllers.StrafeDriveController;
 import org.usfirst.systemetric.robotics.MinibotDeployer;
 
@@ -21,20 +22,28 @@ public class MainV2 extends IterativeRobot {
 	final BaseRobot    robot             = BaseRobot.getInstance();
 
 	final Controller[] controllers       = new Controller[] {
-		                                       new ArmController(robot),
-	 	                                       new GrabberController(robot),
-		                                       new StrafeDriveController(robot)
+	                                           new PositionArmController(robot),
+	                                           new GrabberController(robot),
+	                                           new StrafeDriveController(robot)
 	                                       };
 
-	MinibotDeployer    minibot           = new MinibotDeployer(3);
+	MinibotDeployer    minibot           = new MinibotDeployer(2);
 	MinibotController  minibotController = new MinibotController(minibot);
 
-	public void teleopInit() {
+	AutonomousMode     auto              = new AutonomousMode(robot);
+
+	public void autonomousInit() {
 		robot.compressor.start();
-		//robot.roundTimer.start();
-		// time.start();
-		// added
-		// testCompass = new HiTechnicCompass(4);
+		//auto.init();
+	}
+
+	public void autonomousContinuous() {
+		//auto.continuous();
+	}
+
+	public void teleopInit() {
+		//auto.disable();
+		robot.compressor.start();
 	}
 
 	public void teleopPeriodic() {
@@ -53,9 +62,9 @@ public class MainV2 extends IterativeRobot {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void disabledInit() {
-			minibot.retract();
+		minibot.retract();
 	}
-	
+
 }
