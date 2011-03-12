@@ -18,13 +18,13 @@ public class PositionArmController {
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.armJoystick;
 
-		if (joystick.getRawButton(11)) {
+		if (joystick.getRawButton(9)) {
 			position = PegPosition.BOTTOM;
-		} else if (joystick.getRawButton(12)) {
+		} else if (joystick.getRawButton(8)) {
 			position = PegPosition.BOTTOM_OFFSET;
-		} else if (joystick.getRawButton(9)) {
+		} else if (joystick.getRawButton(7)) {
 			position = PegPosition.MIDDLE;
-		} else if (joystick.getRawButton(10)) {
+		} else if (joystick.getRawButton(6)) {
 			position = PegPosition.MIDDLE_OFFSET;
 		}		
 		try {

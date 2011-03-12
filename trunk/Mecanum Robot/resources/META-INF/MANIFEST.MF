@@ -1,7 +1,7 @@
 MIDlet-Name: SystemetricCode
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: FIRST
-MIDlet-1: Main, , org.usfirst.systemetric.Main
+MIDlet-1: PositionArmTest, , org.usfirst.systemetric.preliminary.PositionArmTest
 MicroEdition-Profile: IMP-1.0
 MicroEdition-Configuration: CLDC-1.1
 

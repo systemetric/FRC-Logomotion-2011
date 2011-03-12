@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.parsing.IMechanism;
 public class PositionControlledArm implements IMechanism {
 	// Chain pitch = 8mm
 	public final static double metresPerEncoderRev = 0.008 * 13;
-	public final static double heightTolerance     = 0.1;
+	public final static double heightTolerance     = 0.025;
 
 	volatile PegPosition       targetPosition      = null;
 	java.util.Timer            controlLoop         = new Timer();
@@ -50,9 +50,10 @@ public class PositionControlledArm implements IMechanism {
 			jag.changeControlMode(ControlMode.kPosition);
 			jag.setPositionReference(PositionReference.kQuadEncoder);
 			jag.configEncoderCodesPerRev(6);
-			jag.setPID(100, 0.05, 0);
+			jag.setPID(250, 0.05, 0);
 			jag.configMaxOutputVoltage(12);
 			jag.enableControl();
+			jag.setX(-10 / metresPerEncoderRev);
         } catch (CANTimeoutException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
@@ -63,8 +64,9 @@ public class PositionControlledArm implements IMechanism {
 	}
 
 	public void moveTo(PegPosition position) throws CANTimeoutException {
+		if(position == null) return;
+		if(targetPosition != position) System.out.println("Set position to " + position.height);
 		targetPosition = position;
-		System.out.println("Set position to " + position.height);
 	}
 
 	public double getHeight() throws CANTimeoutException {
@@ -84,14 +86,16 @@ public class PositionControlledArm implements IMechanism {
 
 			// Arm is at top
 			if (!jag.getForwardLimitOK()) {
-				double actualPosition = PegPosition.TOP_LIMIT.height;
+				double actualPosition = PegPosition.TOP_LIMIT.encoderCount;
 				positionOffset = jagPosition - actualPosition;
+				System.out.println("At top limit");
 			}
 
 			// Arm is at bottom
 			if (!jag.getReverseLimitOK()) {
-				double actualPosition = PegPosition.BOTTOM_LIMIT.height;
+				double actualPosition = PegPosition.BOTTOM_LIMIT.encoderCount;
 				positionOffset = jagPosition - actualPosition;
+				System.out.println("At bottom limit");
 			}
 		}
 
@@ -101,6 +105,7 @@ public class PositionControlledArm implements IMechanism {
 
 			try {
 				handleLimits();
+				
 
 				if (targetPosition != null) {
 					double positionError = getHeight() - targetPosition.height;
@@ -114,6 +119,7 @@ public class PositionControlledArm implements IMechanism {
 						jag.configMaxOutputVoltage(12);
 						jag.setX(targetPosition.encoderCount + positionOffset);
 					}
+					System.out.println("Height: " + getHeight());
 				}
 			} catch (CANTimeoutException e) {
 				e.printStackTrace();

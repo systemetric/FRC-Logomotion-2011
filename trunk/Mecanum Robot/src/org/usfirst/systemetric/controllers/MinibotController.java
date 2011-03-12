@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.GenericHID;
  * 
  */
 public class MinibotController implements Controller {
-	static final int    DEPLOY_TOGGLE_BUTTON       = 7;
+	static final int    DEPLOY_TOGGLE_BUTTON       = 11;
 
 	// TODO correct this value!!!
 	static final double LENGTH_OF_ROUND_IN_SECONDS = 120;
