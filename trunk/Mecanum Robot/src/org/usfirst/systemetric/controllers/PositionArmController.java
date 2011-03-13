@@ -7,6 +7,8 @@ import org.usfirst.systemetric.robotics.PositionControlledArm;
 import org.usfirst.systemetric.robotics.PositionControlledArm.PegPosition;
 import org.usfirst.systemetric.util.DeadZone;
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
@@ -16,6 +18,8 @@ public class PositionArmController implements Controller {
 	PositionControlledArm arm;
 	DeadZone              deadZone       = new DeadZone(0.05);
 	long                  lastUpdateTime = -1;
+	
+	DriverStationLCD lcd = DriverStationLCD.getInstance();
 
 	public PositionArmController(PositionControlledArm arm) {
 		this.arm = arm;
@@ -50,6 +54,9 @@ public class PositionArmController implements Controller {
 		//Manually adjust the height by using the joystick
 		double speed = deadZone.applyTo(joystick.getY());
 		if(target != null) target = PegPosition.custom(target.height + speed * dt * MANUAL_SPEED);
+		lcd.println(Line.kUser3, 1, "Arm: " + arm.getVoltage() + "V");
+		lcd.updateLCD();
+		
 		System.out.println("Target: " + target);
 		
 		//Turn on the motor

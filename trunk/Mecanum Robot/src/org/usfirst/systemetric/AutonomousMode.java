@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class AutonomousMode {
-	final double  FORWARD_SPEED = -0.7;
+	final double  FORWARD_SPEED = -0.8;
 	final long    T_WAIT_TIME   = 500;
 
 	final long    NUM_TS        = 1;
@@ -44,7 +44,7 @@ public class AutonomousMode {
 		
 
 		//Wait for the grabber to grab
-		Timer.delay(6.5);
+		Timer.delay(7);
 		robot.grabber.grab();
 		//Timer.delay(1);
 		
@@ -53,13 +53,12 @@ public class AutonomousMode {
 		controller.reset();
 		controller.enable();
 
-
 		//Wait for the grabber to tilt up
 		robot.grabber.tiltUp();
 		
 		//Move the arm
 		try {
-			robot.arm.moveTo(PegPosition.BOTTOM_OFFSET);
+			robot.arm.moveTo(PegPosition.MIDDLE_OFFSET);
 		} catch (CANTimeoutException e) {
 			e.printStackTrace();
 		}

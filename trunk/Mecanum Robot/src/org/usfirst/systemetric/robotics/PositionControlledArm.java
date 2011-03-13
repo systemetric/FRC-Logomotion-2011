@@ -4,8 +4,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
 import edu.wpi.first.wpilibj.CANJaguar.PositionReference;
+import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
@@ -19,7 +21,7 @@ public class PositionControlledArm implements IMechanism {
 	java.util.Timer            controlLoop         = new Timer();
 	boolean                    doFeedback          = false;
 	public CANJaguar           jag;
-	double                     positionOffset      = 0;
+	volatile double            positionOffset      = 0;
 
 	/**
 	 * Set of positions that the arm can be placed in
@@ -67,24 +69,24 @@ public class PositionControlledArm implements IMechanism {
 
 	public boolean positionControlMode = false;
 
-//	private void configSpeedControl() {
-//		if (!positionControlMode)
-//			return;
-//		try {
-//			jag.disableControl();
-//
-//			jag.changeControlMode(ControlMode.kPercentVbus);
-//			jag.setVoltageRampRate(24);
-//			jag.configMaxOutputVoltage(12);
-//
-//			jag.enableControl();
-//
-//			positionControlMode = false;
-//			System.out.println("Changed to speed control");
-//		} catch (CANTimeoutException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	// private void configSpeedControl() {
+	// if (!positionControlMode)
+	// return;
+	// try {
+	// jag.disableControl();
+	//
+	// jag.changeControlMode(ControlMode.kPercentVbus);
+	// jag.setVoltageRampRate(24);
+	// jag.configMaxOutputVoltage(12);
+	//
+	// jag.enableControl();
+	//
+	// positionControlMode = false;
+	// System.out.println("Changed to speed control");
+	// } catch (CANTimeoutException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	private void configPositionControl() {
 		if (positionControlMode)
@@ -107,19 +109,19 @@ public class PositionControlledArm implements IMechanism {
 		}
 	}
 
-//	public void setSpeed(double speed) {
-//		if (speed == 0)
-//			return;
-//
-//		targetPosition = null;
-//		configSpeedControl();
-//
-//		try {
-//			jag.setX(speed);
-//		} catch (CANTimeoutException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	// public void setSpeed(double speed) {
+	// if (speed == 0)
+	// return;
+	//
+	// targetPosition = null;
+	// configSpeedControl();
+	//
+	// try {
+	// jag.setX(speed);
+	// } catch (CANTimeoutException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	public void moveTo(PegPosition position) throws CANTimeoutException {
 		if (position == null)
@@ -129,16 +131,26 @@ public class PositionControlledArm implements IMechanism {
 
 		targetPosition = position;
 		doFeedback = true;
+
+	//	DriverStationLCD.getInstance().println(Line.kUser3, 1, "Arm: "+jag.get() + "V   ");
 	}
 	
-	public boolean inPosition() {
+	public double getVoltage() {
 		try {
-            return Math.abs(getHeight() - targetPosition.height) < heightTolerance;
+	        return jag.getOutputVoltage();
         } catch (CANTimeoutException e) {
-            return false;
+	        return Double.NaN;
         }
 	}
-	
+
+	public boolean inPosition() {
+		try {
+			return Math.abs(getHeight() - targetPosition.height) < heightTolerance;
+		} catch (CANTimeoutException e) {
+			return false;
+		}
+	}
+
 	public void reset() {
 		try {
 			moveTo(PegPosition.RESET);
@@ -195,7 +207,7 @@ public class PositionControlledArm implements IMechanism {
 
 				if (positionControlMode && targetPosition != null && doFeedback) {
 					double positionError = getHeight() - targetPosition.height;
-					
+
 					if (inPosition()) {
 						doFeedback = false;
 						jag.configMaxOutputVoltage(0);
