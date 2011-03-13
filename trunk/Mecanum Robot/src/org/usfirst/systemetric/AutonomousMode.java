@@ -17,10 +17,12 @@ public class AutonomousMode {
 
 	BaseRobot     robot;
 	PIDController controller;
+	
+	boolean initFinished;
 
 	public AutonomousMode(BaseRobot robot) {
 		this.robot = robot;
-
+		initFinished = false;
 		controller = new PIDController(10, 0, 0, robot.lineSensor, new PIDOutput() {
 			public void pidWrite(double output) {
 				if (Double.isNaN(output))
@@ -35,29 +37,29 @@ public class AutonomousMode {
 		
 		//Wait for the hook to come undone
 		robot.compressor.start();
-		Timer.delay(3.5);
 		
 		//Wait for the grabber to tilt down
+		Timer.delay(2.5);
 		robot.grabber.tiltDown();
-		Timer.delay(2);
 		
 
+		//Wait for the grabber to grab
+		Timer.delay(6.5);
+		robot.grabber.grab();
+		//Timer.delay(1);
+		
 		//start following the line
 		robot.lineSensor.setLinePreference(LinePreference.LEFT);
 		controller.reset();
 		controller.enable();
 
-		//Wait for the grabber to grab
-		robot.grabber.grab();
-		Timer.delay(2.5);
 
 		//Wait for the grabber to tilt up
 		robot.grabber.tiltUp();
-		Timer.delay(2.5);
 		
 		//Move the arm
 		try {
-			robot.arm.moveTo(PegPosition.MIDDLE_OFFSET);
+			robot.arm.moveTo(PegPosition.BOTTOM_OFFSET);
 		} catch (CANTimeoutException e) {
 			e.printStackTrace();
 		}
@@ -91,11 +93,17 @@ public class AutonomousMode {
 	
 		controller.disable();
 		robot.drive.setDriveVelocity(Vector.ZERO);
+		
+		//Wait until the arm is in position
+		//while(!robot.arm.inPosition());
+		
 		robot.grabber.release();
-		// Arm goes down
+		Timer.delay(0.5);
+		robot.drive.setDriveVelocity(new Vector(0, 0.2));
 	}
 	
 	public void disable() {
 		controller.disable();
+		robot.grabber.release();
 	}
 }

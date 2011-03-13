@@ -57,10 +57,7 @@ public class PositionControlledArm implements IMechanism {
 		try {
 			jag = new CANJaguar(canId);
 			configPositionControl();
-			configSpeedControl();
-			configPositionControl();
 		} catch (CANTimeoutException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -70,24 +67,24 @@ public class PositionControlledArm implements IMechanism {
 
 	public boolean positionControlMode = false;
 
-	private void configSpeedControl() {
-		if (!positionControlMode)
-			return;
-		try {
-			jag.disableControl();
-
-			jag.changeControlMode(ControlMode.kPercentVbus);
-			jag.setVoltageRampRate(24);
-			jag.configMaxOutputVoltage(12);
-
-			jag.enableControl();
-
-			positionControlMode = false;
-			System.out.println("Changed to speed control");
-		} catch (CANTimeoutException e) {
-			e.printStackTrace();
-		}
-	}
+//	private void configSpeedControl() {
+//		if (!positionControlMode)
+//			return;
+//		try {
+//			jag.disableControl();
+//
+//			jag.changeControlMode(ControlMode.kPercentVbus);
+//			jag.setVoltageRampRate(24);
+//			jag.configMaxOutputVoltage(12);
+//
+//			jag.enableControl();
+//
+//			positionControlMode = false;
+//			System.out.println("Changed to speed control");
+//		} catch (CANTimeoutException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	private void configPositionControl() {
 		if (positionControlMode)
@@ -110,19 +107,19 @@ public class PositionControlledArm implements IMechanism {
 		}
 	}
 
-	public void setSpeed(double speed) {
-		if (speed == 0)
-			return;
-
-		targetPosition = null;
-		configSpeedControl();
-
-		try {
-			jag.setX(speed);
-		} catch (CANTimeoutException e) {
-			e.printStackTrace();
-		}
-	}
+//	public void setSpeed(double speed) {
+//		if (speed == 0)
+//			return;
+//
+//		targetPosition = null;
+//		configSpeedControl();
+//
+//		try {
+//			jag.setX(speed);
+//		} catch (CANTimeoutException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void moveTo(PegPosition position) throws CANTimeoutException {
 		if (position == null)
@@ -132,6 +129,14 @@ public class PositionControlledArm implements IMechanism {
 
 		targetPosition = position;
 		doFeedback = true;
+	}
+	
+	public boolean inPosition() {
+		try {
+            return Math.abs(getHeight() - targetPosition.height) < heightTolerance;
+        } catch (CANTimeoutException e) {
+            return false;
+        }
 	}
 	
 	public void reset() {
@@ -190,13 +195,11 @@ public class PositionControlledArm implements IMechanism {
 
 				if (positionControlMode && targetPosition != null && doFeedback) {
 					double positionError = getHeight() - targetPosition.height;
-
-					boolean inPosition = Math.abs(positionError) < heightTolerance;
-
-					if (inPosition) {
+					
+					if (inPosition()) {
 						doFeedback = false;
 						jag.configMaxOutputVoltage(0);
-					} else if (!inPosition) {
+					} else {
 						jag.configMaxOutputVoltage(12);
 						jag.setX(targetPosition.encoderCount + positionOffset);
 					}
