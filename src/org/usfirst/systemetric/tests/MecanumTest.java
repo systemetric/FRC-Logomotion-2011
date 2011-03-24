@@ -1,5 +1,6 @@
 package org.usfirst.systemetric.tests;
 
+import org.usfirst.systemetric.BaseRobot;
 import org.usfirst.systemetric.OperatorConsole;
 import org.usfirst.systemetric.controllers.StrafeDriveController;
 import org.usfirst.systemetric.geometry.Vector;
@@ -24,12 +25,7 @@ public class MecanumTest extends IterativeRobot {
 	public void robotInit() {
 		Timer.delay(2);
 
-		Vector size = new Vector(0.55, 0.7);
-		double wheelRadius = 0.075;
-		double gearRatio = 19.0 / 36.0;
-
-		robot = OrthogonalMecanumDriveFactory.createMecanumDrive(size, wheelRadius, gearRatio);
-		driveController = new StrafeDriveController(robot);
+		driveController = new StrafeDriveController(BaseRobot.getInstance());
 	}
 
 	public void teleopPeriodic() {		
