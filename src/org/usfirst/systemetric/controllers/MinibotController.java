@@ -50,7 +50,7 @@ public class MinibotController implements Controller {
 
 	public void controlWith(OperatorConsole cb) {
 		GenericHID joystick = cb.armJoystick;
-		DigitalInput minibotButton = cb.minibotDeploy;
+		//DigitalInput minibotButton = cb.minibotDeploy;
 
 		// code with timer built in
 		/*
@@ -63,15 +63,13 @@ public class MinibotController implements Controller {
 		 * if (joystick.getRawButton(DEPLOY_TOGGLE_BUTTON)) {
 		 * System.out.println("minibot deployed"); minibot.deploy(); }
 		 */
-		try {
-			if (joystick.getRawButton(DEPLOY_TOGGLE_BUTTON) || minibotButton.get()) {
+		//try {
+			if (joystick.getRawButton(DEPLOY_TOGGLE_BUTTON)) {// || minibotButton.get()) {
 				System.out.println("minibot deployed");
 				lcd.println(Line.kUser2, 1, "Minibot is deployed");
 				lcd.updateLCD();
 				minibot.deploy();
 			}
-		} catch (EnhancedIOException e) {
-			e.printStackTrace();
-		}
+		//}
 	}
 }

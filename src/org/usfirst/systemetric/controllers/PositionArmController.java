@@ -10,6 +10,7 @@ import org.usfirst.systemetric.util.DeadZone;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.SmartDashboard;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class PositionArmController implements Controller {
@@ -51,13 +52,17 @@ public class PositionArmController implements Controller {
 		else if (joystick.getRawButton(10))
 			target = PegPosition.RESET;
 		
+		
 		//Manually adjust the height by using the joystick
 		double speed = deadZone.applyTo(joystick.getY());
 		if(target != null) target = PegPosition.custom(target.height + speed * dt * MANUAL_SPEED);
-		lcd.println(Line.kUser3, 1, "Arm: " + arm.getVoltage() + "V");
-		lcd.updateLCD();
 		
-		System.out.println("Target: " + target);
+		try {
+	        SmartDashboard.log(arm.getHeight(), "Arm Height");
+        } catch (CANTimeoutException e1) {
+	        // TODO Auto-generated catch block
+	        e1.printStackTrace();
+        }
 		
 		//Turn on the motor
 		try {

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
 import edu.wpi.first.wpilibj.CANJaguar.PositionReference;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SmartDashboard;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.parsing.IMechanism;
 
@@ -17,7 +18,7 @@ public class PositionControlledArm implements IMechanism {
 	public final static double metresPerEncoderRev = 0.008 * 13;
 	public final static double heightTolerance     = 0.025;
 
-	volatile PegPosition       targetPosition      = null;
+	volatile PegPosition       targetPosition      = PegPosition.RESET;
 	java.util.Timer            controlLoop         = new Timer();
 	boolean                    doFeedback          = false;
 	public CANJaguar           jag;
@@ -28,8 +29,8 @@ public class PositionControlledArm implements IMechanism {
 	 * 
 	 */
 	public static class PegPosition {
-		public final double             height;
-		public final double             encoderCount;
+		public double             height;
+		public double             encoderCount;
 
 		public static final PegPosition RESET         = new PegPosition(-10.0);
 		public static final PegPosition BOTTOM_LIMIT  = new PegPosition(0.75);
@@ -41,6 +42,8 @@ public class PositionControlledArm implements IMechanism {
 
 		public static final PegPosition TOP_LIMIT     = new PegPosition(2.00);
 
+		private static PegPosition custom = new PegPosition(Double.NaN);
+		
 		private PegPosition(double height) {
 			this.height = height;
 			this.encoderCount = height / metresPerEncoderRev;
@@ -51,7 +54,9 @@ public class PositionControlledArm implements IMechanism {
 		}
 
 		public static PegPosition custom(double height) {
-			return new PegPosition(height);
+			custom.height = height;
+			custom.encoderCount = height / metresPerEncoderRev;
+			return custom;
 		}
 	}
 
@@ -67,33 +72,8 @@ public class PositionControlledArm implements IMechanism {
 
 	}
 
-	public boolean positionControlMode = false;
-
-	// private void configSpeedControl() {
-	// if (!positionControlMode)
-	// return;
-	// try {
-	// jag.disableControl();
-	//
-	// jag.changeControlMode(ControlMode.kPercentVbus);
-	// jag.setVoltageRampRate(24);
-	// jag.configMaxOutputVoltage(12);
-	//
-	// jag.enableControl();
-	//
-	// positionControlMode = false;
-	// System.out.println("Changed to speed control");
-	// } catch (CANTimeoutException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 	private void configPositionControl() {
-		if (positionControlMode)
-			return;
 		try {
-			jag.disableControl();
-
 			jag.changeControlMode(ControlMode.kPosition);
 			jag.setPositionReference(PositionReference.kQuadEncoder);
 			jag.configEncoderCodesPerRev(6);
@@ -101,38 +81,17 @@ public class PositionControlledArm implements IMechanism {
 			jag.configMaxOutputVoltage(12);
 
 			jag.enableControl();
-
-			positionControlMode = true;
-			System.out.println("Changed to position control");
 		} catch (CANTimeoutException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// public void setSpeed(double speed) {
-	// if (speed == 0)
-	// return;
-	//
-	// targetPosition = null;
-	// configSpeedControl();
-	//
-	// try {
-	// jag.setX(speed);
-	// } catch (CANTimeoutException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 	public void moveTo(PegPosition position) throws CANTimeoutException {
 		if (position == null)
 			return;
 
-		configPositionControl();
-
 		targetPosition = position;
 		doFeedback = true;
-
-	//	DriverStationLCD.getInstance().println(Line.kUser3, 1, "Arm: "+jag.get() + "V   ");
 	}
 	
 	public double getVoltage() {
@@ -159,12 +118,20 @@ public class PositionControlledArm implements IMechanism {
 		}
 	}
 
+	private double position;
+	
 	public double getHeight() throws CANTimeoutException {
-		return metresPerEncoderRev * (jag.getPosition() - positionOffset);
+		return metresPerEncoderRev * (position - positionOffset);
 	}
 
 	public PegPosition getTarget() {
 		return targetPosition;
+	}
+	
+	volatile String state;
+	
+	public String getState() {
+		return state;
 	}
 
 	private class ArmTask extends TimerTask {
@@ -176,25 +143,24 @@ public class PositionControlledArm implements IMechanism {
 		 * @throws CANTimeoutException
 		 */
 		private void handleLimits() throws CANTimeoutException {
-			double jagPosition = jag.getPosition();
 
 			// Arm is at top
 			if (!jag.getForwardLimitOK()) {
 				double actualPosition = PegPosition.TOP_LIMIT.encoderCount;
-				positionOffset = jagPosition - actualPosition;
+				positionOffset = position - actualPosition;
 
-				System.out.println("At top limit");
+				state = "Top limit";
 			}
 
 			// Arm is at bottom
 			if (!jag.getReverseLimitOK()) {
 				double actualPosition = PegPosition.BOTTOM_LIMIT.encoderCount;
-				positionOffset = jagPosition - actualPosition;
+				positionOffset = position - actualPosition;
 
 				if (targetPosition == PegPosition.RESET)
 					targetPosition = PegPosition.BOTTOM;
 
-				System.out.println("At bottom limit");
+				state = "Bottom limit";
 			}
 		}
 
@@ -203,24 +169,23 @@ public class PositionControlledArm implements IMechanism {
 				return;
 
 			try {
+				position = jag.getPosition();
 				handleLimits();
 
-				if (positionControlMode && targetPosition != null && doFeedback) {
-					double positionError = getHeight() - targetPosition.height;
-
+				if (targetPosition != null && doFeedback) {
 					if (inPosition()) {
+						state = "In position";
 						doFeedback = false;
-						jag.configMaxOutputVoltage(0);
 					} else {
 						jag.configMaxOutputVoltage(12);
 						jag.setX(targetPosition.encoderCount + positionOffset);
 					}
-					System.out.println("Height: " + getHeight());
+				} else {
+					jag.configMaxOutputVoltage(0);
 				}
 			} catch (CANTimeoutException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
 }

@@ -35,7 +35,7 @@ public class GrabberController implements Controller {
 			toggled = true;
 		}
 		
-		SmartDashboard.log(grabber.isGrabbed() ? "Closed" : "Open", "Grabber state");
+		SmartDashboard.log(grabber.isGrabbed() ? "Grabbed" : "Released", "Grabber");
 
 		if (!joystick.getRawButton(TILT_TOGGLE_BUTTON)) {
 			tiltToggled = false;
@@ -46,6 +46,6 @@ public class GrabberController implements Controller {
 			tiltToggled = true;
 		}
 		
-		SmartDashboard.log(grabber.isUp() ? "Up" : "Down", "Tilt state");
+		SmartDashboard.log(grabber.isUp() ? "Up" : "Down", "Tilted");
 	}
 }
